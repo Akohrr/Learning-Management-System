@@ -1,0 +1,18 @@
+<header class="w3-container w3-teal">
+
+    <h2>Add new {{ choice }}</h2>
+   </header>
+
+
+  <form method="post" id="js-new-user-form" novalidate>  
+      <div class="w3-section form-data w3-container">
+
+        {% include "classroom/includes/form.html" with form=form %}
+
+        <button class="w3-button w3-round-large w3-teal">Submit</button>
+
+      </div>
+  </form> 
+  <footer class="w3-container w3-teal">
+    <p>Modal Footer</p>
+</footer>

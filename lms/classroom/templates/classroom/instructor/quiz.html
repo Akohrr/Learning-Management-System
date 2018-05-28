@@ -1,0 +1,47 @@
+{% extends "classroom/instructor_base.html" %}
+{% load static %}
+
+{% block choice %}
+    Quiz
+{% endblock choice %}
+
+{% block content %}
+
+    <div class="w3-section">
+
+        
+        <table class="w3-table w3-bordered">
+            <tr>
+            <th>Course code</th>
+            <th>Course title</th>
+            </tr>
+
+            <tbody>
+            {% for course in courses %}
+            <tr class="w3-hover-teal js-update-soul" data-href="{{user.get_absolute_url}}">
+            <td>{{course.code}}</td>
+            <td>{{course.title}}</td>
+            </tr>
+
+            {% empty %}
+            <tbody>
+                <tr>
+                    <td colspan="2" class="w3-grey w3-center">No data to display</td>
+                </tr>
+            </tbody>
+            {% endfor %}
+            </tbody>
+
+        </table>
+
+    </div>
+           
+
+{% endblock content %}
+
+{% block instructor_javascript %}
+
+<script src="{% static 'classroom/js/instructor/quiz.js' %}"></script>
+
+
+{% endblock instructor_javascript %}

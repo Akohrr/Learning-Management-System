@@ -1,0 +1,50 @@
+{% extends "classroom/base.html" %}
+
+{% load static %}
+
+{% block choice %}
+    Teaching Assistants
+{% endblock choice %}
+
+{% block content %}
+
+    <div class="w3-section">
+
+        
+        <table class="w3-table w3-bordered">
+            <tr>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>E-mail</th>
+            </tr>
+
+            <tbody>
+            {% for teaching_assistant in teaching_assistants %}
+            <tr class="w3-hover-teal js-update-soul" data-href="{{user.get_absolute_url}}">
+            <td>{{teaching_assistant.first_name}}</td>
+            <td>{{teaching_assistant.last_name}}</td>
+            <td>{{teaching_assistant.email}}</td>
+            </tr>
+
+            {% empty %}
+            <tbody>
+                <tr>
+                    <td colspan="3" class="w3-grey w3-center">No data to display</td>
+                </tr>
+            </tbody>
+            {% endfor %}
+            </tbody>
+
+        </table>
+
+    </div>
+           
+
+{% endblock content %}
+
+{% block lms_admin_javascript %}
+
+<script src="{% static 'classroom/js/lms_admin/teaching_assistants.js' %}"></script>
+
+
+{% endblock lms_admin_javascript %}

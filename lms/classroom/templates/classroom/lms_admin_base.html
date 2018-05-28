@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% load static %}
+{% block boilerplate_html %}
+
+
+
+<div class="w3-sidebar w3-light-grey w3-bar-block" style="width:25%">
+  {% if user.is_authenticated %}
+    <h3 class="w3-bar-item">Welcome {{user.first_name}}, {{user.last_name}} (<a href="/accounts/logout/">Logout</a>)</h3>
+  {% else %}
+  
+  {% endif %}
+    <h3 class="w3-bar-item">Menu</h3>
+
+
+    <a href="/lms-admin/classroom/lms-admins/" class="w3-bar-item w3-button">Admin Staff</a>
+    <a href="/lms-admin/classroom/instructors/" class="w3-bar-item w3-button">Instructor</a>
+    <a href="/lms-admin/classroom/students/" class="w3-bar-item w3-button">Students</a>
+    <a href="/lms-admin/classroom/courses/" class="w3-bar-item w3-button">Courses</a>
+
+
+
+  </div>
+  
+  <!-- Page Content -->
+  <div style="margin-left:25%">
+    <div class="w3-container w3-teal">
+      <h1>Learning Management System portal</h1>
+    </div>
+
+
+
+
+      <div class="w3-container">
+
+        <h2> {% block choice %}
+          <!-- Type to be inserted here(Admin/Instructors/Students/Courses) -->
+        {% endblock choice %}  </h2>
+
+        <br>
+
+        <button id="js-add-new-user-btn" class="w3-button w3-black">Add new </button>
+          <div id="token">
+            {% csrf_token %}
+          </div>
+        <div id="js-add-new-user-modal" class="w3-modal">
+            <div id="js-add-new-user-modal-content" class="w3-modal-content w3-card-4 w3-animate-zoom">
+              <span id="js-close-new-user-modal"
+              class="w3-button w3-teal w3-large w3-display-topright">&times;</span>
+              <div id="display-form-content">
+
+              </div>
+            </div>
+        </div> 
+
+
+      </div>
+      {% block content %}
+      
+      {% endblock content %}
+  
+  
+  </div>
+
+
+{% endblock boilerplate_html %}
+
+  {% block javascript %}
+  <!-- javascript file used by all classroom sub pages -->
+  <script src="{% static 'classroom/js/main.js' %}"></script>
+
+  <!-- block to include javascript files of lms_admin sub pages particular to one page -->
+  {% block lms_admin_javascript %}
+  
+  {% endblock lms_admin_javascript %}
+
+
+  {% endblock javascript %}
+

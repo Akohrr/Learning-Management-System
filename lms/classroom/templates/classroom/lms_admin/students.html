@@ -1,0 +1,52 @@
+{% extends "classroom/base.html" %}
+
+{% load static %}
+
+{% block choice %}
+    Students
+{% endblock choice %}
+
+{% block content %}
+
+
+
+    <div class="w3-section">
+
+        
+        <table class="w3-table w3-bordered">
+            <tr>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>E-mail</th>
+            </tr>
+
+            <tbody>
+            {% for student in students %}
+            <tr>
+            <td>{{student.first_name}}</td>
+            <td>{{student.last_name}}</td>
+            <td>{{student.email}}</td>
+            </tr>
+
+            {% empty %}
+            <tbody>
+                <tr>
+                    <td colspan="3" class="w3-grey w3-center">No data to display</td>
+                </tr>
+            </tbody>
+            {% endfor %}
+            </tbody>
+
+        </table>
+
+    </div>
+           
+
+{% endblock content %}
+
+{% block lms_admin_javascript %}
+
+<script src="{% static 'classroom/js/lms_admin/student.js' %}"></script>
+
+
+{% endblock lms_admin_javascript %}

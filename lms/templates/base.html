@@ -1,0 +1,33 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title> 
+    <link rel="stylesheet" type="text/css" href="{% static 'vendor/w3.css' %}">
+    <link rel="stylesheet" type="text/css" href="https://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css"></link>
+
+    
+    {% block css %}
+    
+    {% endblock css %}
+
+</head>
+<body>
+    
+    {% block boilerplate_html %}
+
+    
+    {% endblock boilerplate_html %}
+
+
+    <script type="text/javascript" src="{% static 'vendor/jquery-3.3.1.js'%}"></script>
+    <script src="https://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+
+    {% block javascript %}
+    
+    {% endblock javascript %}
+</body>
+</html>

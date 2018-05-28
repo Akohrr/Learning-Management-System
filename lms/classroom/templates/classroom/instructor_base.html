@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% load static %}
+{% block boilerplate_html %}
+
+
+
+<div class="w3-sidebar w3-light-grey w3-bar-block" style="width:25%">
+  {% if user.is_authenticated %}
+    <h3 class="w3-bar-item">Welcome {{user.first_name}}, {{user.last_name}} (<a href="/accounts/logout/">Logout</a>)</h3>
+  {% else %}
+  
+  {% endif %}
+    <h3 class="w3-bar-item">Menu</h3>
+
+
+    <a href="/instructor/classroom/assignments/" class="w3-bar-item w3-button">Assignment</a>
+    <a href="/instructor/classroom/quiz/" class="w3-bar-item w3-button">Quiz</a>
+    <a href="/instructor/classroom/grades/" class="w3-bar-item w3-button">Grades</a>
+    <a href="/instructor/classroom/comments/" class="w3-bar-item w3-button">Comments</a>
+
+
+
+</div>
+
+  <!-- Page Content -->
+<div style="margin-left:25%">
+<div class="w3-container w3-teal">
+    <h1>Learning Management System portal</h1>
+</div>
+
+
+<div class="w3-container">
+
+        <h2> {% block choice %}
+          <!-- Type to be inserted here(Assigments/Quiz/Grades/Comments) -->
+        {% endblock choice %}  </h2>
+
+        <br>
+
+        <button id="js-add-new-user-btn" class="w3-button w3-black">Add new </button>
+          <div id="token">
+            {% csrf_token %}
+          </div>
+        <div id="js-add-new-user-modal" class="w3-modal">
+            <div id="js-add-new-user-modal-content" class="w3-modal-content w3-card-4 w3-animate-zoom">
+              <span id="js-close-new-user-modal"
+              class="w3-button w3-teal w3-large w3-display-topright">&times;</span>
+              <div id="display-form-content">
+
+              </div>
+            </div>
+        </div> 
+
+
+      </div>
+      {% block content %}
+      
+      {% endblock content %}
+  
+  
+  </div>
+
+
+{% endblock boilerplate_html %}
+
+  {% block javascript %}
+  <!-- javascript file used by all classroom sub pages -->
+  <script src="{% static 'classroom/js/main.js' %}"></script>
+
+  <!-- block to include javascript files of instructor sub pages particular to one page -->
+  {% block instructor_javascript %}
+  
+  {% endblock instructor_javascript %}
+
+
+  {% endblock javascript %}

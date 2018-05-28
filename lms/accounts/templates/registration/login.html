@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% load static %}
+{% load widget_tweaks %}
+
+
+{% block boilerplate_html %}
+
+
+<div class="w3-container w3-center" style="width:500px; margin:auto;">
+  
+  
+  <h2>Login</h2>
+
+  <img src="{% static 'img/student_avatar.png' %}" alt="Avatar" style="width:30%" class="w3-circle w3-margin-top">
+  
+    <form class="w3-container" method="POST" action="{% url 'accounts:login' %}">
+      {% csrf_token %}
+      
+      {% if form.non_field_errors %}
+    <div class="w3-teal">
+        {% for error in form.non_field_errors %}
+        <p>{{ error }}</p>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+      <div class="w3-section">
+        {% with WIDGET_ERROR_CLASS="w3-teal" %}
+        {% render_field form.username class="w3-input" add_error_class="w3-border-red" name="email" placeholder="Username" %}
+        {% render_field form.password class="w3-input" add_error_class="w3-border-red" name="pass" placeholder="Password" %}
+        
+        {% endwith %}
+
+        <button class="w3-button w3-block w3-green w3-section w3-padding" type="submit">Login</button>
+        
+      </div>
+    </form>
+  
+
+</div>
+
+{% endblock boilerplate_html %}

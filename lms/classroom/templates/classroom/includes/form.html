@@ -1,0 +1,40 @@
+{% load widget_tweaks %}
+
+    {% if form.non_field_errors %}
+    <div class="w3-panel w3-red">
+        {% for error in form.non_field_errors %}
+        {{ error }}
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    {% for field in form.visible_fields %}
+        {{ field.label_tag }}
+
+        {% autoescape off %}
+        {% if field.help_text %}
+        <br> <small class="w3-text-grey">{{ field.help_text }}</small> <br />
+        {% endif %}
+        {% endautoescape %}
+
+        {% if form.is_bound %}
+        {% if field.errors %}
+            {% for error in field.errors %}
+            <div class="w3-text-red">
+                {{ error }}
+            </div>
+            {% endfor %}
+            {% render_field field class="w3-input w3-round w3-border w3-border-red" %}
+
+        {% else %}
+            {% render_field field class="w3-input w3-round w3-border w3-border-green" %}
+        {% endif %}
+        {% else %}
+        {% render_field field class="w3-input w3-round w3-border" %}
+        {% endif %}
+
+
+        <br>
+    {% endfor %}
+
+
