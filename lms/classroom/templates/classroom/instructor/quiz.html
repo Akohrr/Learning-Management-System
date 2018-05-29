@@ -5,29 +5,33 @@
     Quiz
 {% endblock choice %}
 
+{% block add_button %}
+<button id="js-add-new-choice-btn" class="w3-button w3-black" data-href="{% url 'classroom:instructor_add' choice='quiz' %}">Add new quiz</button>
+{% endblock add_button %}
+
 {% block content %}
 
     <div class="w3-section w3-container">
 
-      {% for quiz in quizes %} <!-- beginning of quiz for loop -->
-      <button onclick="accordionFunction('Demo1')" class="w3-button w3-block w3-grey w3-left-align">{{ quiz.name }}</button>
-      <div id="Demo1" class="w3-hide w3-animate-zoom">
+      {% for quiz in quizes %} <!-- beginning of quiz for-loop -->
+      <button onclick="accordionFunction('quiz-accordion-{{ forloop.counter }}')" class="w3-button w3-block w3-grey w3-left-align">{{ quiz.name }} &emsp; Submitted: {{ quiz.date_of_submission }}</button>
+      <div id="quiz-accordion-{{ forloop.counter }}" class="w3-hide w3-animate-zoom">
       {% for question in questions %}
 
         {% if quiz.name == question.quiz.name %}
         <p><a href="#" class="w3-button w3-block w3-left-align">{{ question |truncatechars:30 }}</a></p>
         {% endif %}
         
-        {% empty %} <!-- empty variable for question for loop -->
+        {% empty %} <!-- empty variable for question for-loop -->
         <p><a href="#" class="w3-button w3-block w3-left-align">No question(s)</a></p>
-      {% endfor %} <!-- end of question for looop -->
+      {% endfor %} <!-- end of question for-loop -->
 
 
-      <p><button class="w3-btn w3-teal" data-href="{{ quiz.get_absolute_url }}">Add a new question</button></p>
+      <p><button class="w3-btn w3-teal js-add-question-quiz" data-href="{{ quiz.get_absolute_url }}">Add a new question</button></p>
 
     </div>
 
-      {% empty %} <!-- empty variable for quiz for loop -->
+      {% empty %} <!-- empty variable for quiz for-loop -->
       <button onclick="accordionFunction('Demo1')" class="w3-button w3-block w3-grey w3-left-align">No Quiz</button>
       <div id="Demo1" class="w3-hide w3-animate-zoom">
         <a href="#" class="w3-button w3-block w3-left-align">No Question(s)</a>

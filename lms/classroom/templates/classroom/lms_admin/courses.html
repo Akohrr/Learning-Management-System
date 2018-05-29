@@ -6,6 +6,10 @@
     Instructors
 {% endblock choice %}
 
+{% block add_button %}
+<button id="js-add-new-choice-btn" class="w3-button w3-black" data-href="{% url 'classroom:lms_admin_add' choice='course' %}">Add new instructor</button>
+{% endblock add_button %}
+
 {% block content %}
 
     <div class="w3-section">

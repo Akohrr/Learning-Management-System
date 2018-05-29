@@ -71,17 +71,17 @@ class Quiz(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return reverse('classroom:add_question', kwargs={'choice':'quiz', 'pk': self.pk })
+        return reverse('classroom:instructor_add_question', kwargs={'choice':'quiz', 'pk': self.pk })
     
 
 class Question(models.Model):
     quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)#, related_name='questions')
     text = models.CharField('Question', max_length=255)
-    first_option = models.TextField()
-    second_option = models.TextField()
-    third_option = models.TextField()
-    fourth_option = models.TextField()
-    answer = models.TextField(help_text='Copy the text of the correct option and past it here')
+    first_option = models.TextField('A')
+    second_option = models.TextField('B')
+    third_option = models.TextField('C')
+    fourth_option = models.TextField('D')
+    answer = models.TextField()
     def __str__(self):
         return self.text
 

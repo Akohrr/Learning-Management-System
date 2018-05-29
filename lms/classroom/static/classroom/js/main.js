@@ -16,6 +16,6 @@
     }
 
 
-    $("#js-close-new-user-modal").click( function () {
-        $("#js-add-new-user-modal").hide();
+    $("#js-close-new-choice-modal").click( function () {
+        $("#js-add-new-choice-modal").hide();
     });

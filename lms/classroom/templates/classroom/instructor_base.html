@@ -13,10 +13,10 @@
     <h3 class="w3-bar-item">Menu</h3>
 
 
-    <a href="/instructor/classroom/assignments/" class="w3-bar-item w3-button">Assignment</a>
-    <a href="/instructor/classroom/quiz/" class="w3-bar-item w3-button">Quiz</a>
-    <a href="/instructor/classroom/grades/" class="w3-bar-item w3-button">Grades</a>
-    <a href="/instructor/classroom/comments/" class="w3-bar-item w3-button">Comments</a>
+    <a href="/classroom/instructor/assignments/" class="w3-bar-item w3-button">Assignment</a>
+    <a href="/classroom/instructor/quiz/" class="w3-bar-item w3-button">Quiz</a>
+    <a href="/classroom/instructor/grades/" class="w3-bar-item w3-button">Grades</a>
+    <a href="/classroom/instructor/comments/" class="w3-bar-item w3-button">Comments</a>
 
 
 
@@ -36,14 +36,15 @@
         {% endblock choice %}  </h2>
 
         <br>
-
-        <button id="js-add-new-user-btn" class="w3-button w3-black">Add new </button>
+          {% block add_button %}
+          <button id="js-add-new-choice-btn" class="w3-button w3-black">Add new</button>
+          {% endblock add_button %}
           <div id="token">
             {% csrf_token %}
           </div>
-        <div id="js-add-new-user-modal" class="w3-modal">
-            <div id="js-add-new-user-modal-content" class="w3-modal-content w3-card-4 w3-animate-zoom">
-              <span id="js-close-new-user-modal"
+        <div id="js-add-new-choice-modal" class="w3-modal">
+            <div id="js-add-new-choice-modal-content" class="w3-modal-content w3-card-4 w3-animate-zoom">
+              <span id="js-close-new-choice-modal"
               class="w3-button w3-teal w3-large w3-display-topright">&times;</span>
               <div id="display-form-content">
 

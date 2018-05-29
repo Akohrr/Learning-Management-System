@@ -1,4 +1,4 @@
-  function accordionFunction(id) {
+function accordionFunction(id) {
     var x = document.getElementById(id);
     if (x.className.indexOf("w3-show") == -1) {
         x.className += " w3-show";
@@ -10,11 +10,6 @@
   
 $(document).ready(function () {
 
-
-
-  $("#js-close-quiz-modal").click( function () {
-    $("#quiz-modal").hide();
-  });
 
 
     $("#js-add-new-choice-btn").click( function () {
@@ -57,7 +52,7 @@ $(document).ready(function () {
   });
 
 
-    $(".js-add-question-quiz").click( function () {
+    $(".js-add-question-assignment").click( function () {
       button = $(this);
       $.ajax({
         url: button.attr("data-href"),

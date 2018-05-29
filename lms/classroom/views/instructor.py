@@ -20,14 +20,12 @@ class ChoiceList(ListView):
     def get(self, request, *args, **kwargs):
         context = get_context_variables(self.kwargs['choice'], self.request.user)
         return self.render_to_response(context)
-        # return render(self.request, 'classroom/instructor/quiz.html', context)
 
     def get_template_names(self):
         template = {
-            'quiz' : r'classroom/instructor/quiz.html',
-            'instructors': r'classroom/instructor/instructors.html',
-            'students'   : r'classroom/instructor/students.html',
-            'courses'    : r'classroom/instructor/courses.html',
+            'quiz'       : r'classroom/instructor/quiz.html',
+            'assignments': r'classroom/instructor/assignments.html',
+            'grades'     : r'classroom/instructor/grades.html',
             }[self.kwargs['choice']]
         return [template]
 
@@ -39,21 +37,16 @@ class ChoiceList(ListView):
 
 class Choice(CreateView):
     info = dict()
-    # model = Quiz
 
     def get_form(self, form_class=None):
         choice = self.kwargs['choice']
-        print(choice)
-        # import time
-        # time.sleep(600)
+
         form = {
-            # 'assignment'      : forms.QuizForm,
-            'quiz'      : forms.AssignmentForm,
-            'question'  : forms.QuestionForm,
+            'assignment': forms.AssignmentForm,
+            'quiz'      : forms.QuizForm,
             # 'grade'     : forms.GradeForm,
             # 'comment'   : forms.CommentForm,
         }[choice]
-        # form = forms.AddAssignmentForm
         return form(**self.get_form_kwargs())
 
     def get_form_kwargs(self):
@@ -62,21 +55,53 @@ class Choice(CreateView):
         return form_kwargs
 
     def get(self, request, *args, **kwargs):
+        path = request.META.get('PATH_INFO')
         form = self.get_form()
-        context = {'form': form, 'choice': 'Quiz'}
+        context = {'path': path, 'form': form, 'choice': self.kwargs['choice']}
         self.info['html_form'] = render_to_string(
             'classroom/includes/new_form_modal.html', context)
         return JsonResponse(self.info)
 
     def form_valid(self, form):
         form.save()
-        # if self.
-        # self.request.POST
         self.info['valid'] = True
         return JsonResponse(self.info)
 
     def form_invalid(self, form):
-        context = {'form': form, 'choice': 'Quiz'}
+        path = self.request.META.get('PATH_INFO')
+        context = {'path': path, 'form': form, 'choice': self.kwargs['choice']}
+        self.info['valid'] = False
+        self.info['html_form'] = render_to_string(
+            'classroom/includes/new_form_modal.html', context)
+        return JsonResponse(self.info)
+
+
+class QuestionHandler(CreateView):
+    info = dict()
+    form_class = forms.QuestionForm
+
+    def get_form_kwargs(self):
+        form_kwargs  = super(QuestionHandler, self).get_form_kwargs()
+        form_kwargs['user'] = self.request.user
+        form_kwargs['pk'] = self.kwargs['pk']
+        return form_kwargs
+
+    def get(self, request, *args, **kwargs):
+        path = request.META.get('PATH_INFO')
+        form = self.get_form()
+        context = {'path': path, 'form': form, 'choice': 'Question'}
+        self.info['html_form'] = render_to_string(
+            'classroom/includes/new_form_modal.html', context)
+        return JsonResponse(self.info)
+
+    def form_valid(self, form):
+        form.save()
+        self.info['valid'] = True
+        return JsonResponse(self.info)
+
+    def form_invalid(self, form):
+        path = self.request.META.get('PATH_INFO')
+        context = {'path': path, 'form': form, 'choice': 'Question'}
         self.info['valid'] = False
         self.info['html_form'] = render_to_string(
             'classroom/includes/new_form_modal.html', context)
@@ -86,11 +111,13 @@ class Choice(CreateView):
 
 def get_context_variables(choice, user=None):
     if choice == 'quiz':
-        quiz = Quiz.objects.filter(owner=user).order_by('date_of_submission')[:21]
-        questions = Question.objects.filter(quiz__owner=user)#.order_by('date_of_submission')[:21]
-        # print(questions)
-        # import time
-        # time.sleep(600)
+        quiz = Quiz.objects.filter(is_assignment=False, owner=user).order_by('date_of_submission')[:21]
+        questions = Question.objects.filter(quiz__owner=user)
         context = {'quizes': quiz, 'questions':questions}
-        print(context)
-        return context
+    elif choice == 'assignments':
+        assignments = Quiz.objects.filter(is_assignment=True, owner=user).order_by('date_of_submission')[:21]
+        questions = Question.objects.filter(quiz__owner=user)
+        context = {'assignments': assignments, 'questions':questions}
+
+
+    return context

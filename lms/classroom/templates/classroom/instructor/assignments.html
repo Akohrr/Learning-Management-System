@@ -1,0 +1,55 @@
+{% extends "classroom/instructor_base.html" %}
+{% load static %}
+
+{% block choice %}
+    Assignment
+{% endblock choice %}
+
+{% block add_button %}
+<button id="js-add-new-choice-btn" class="w3-button w3-black" data-href="{% url 'classroom:instructor_add' choice='assignment' %}">Add new assignment</button>
+{% endblock add_button %}
+
+{% block content %}
+
+    <div class="w3-section w3-container">
+
+      {% for assignment in assignments %} <!-- beginning of assignment for-loop -->
+      <button onclick="accordionFunction('assignment-accordion-{{ forloop.counter }}')" class="w3-button w3-block w3-grey w3-left-align">{{ assignment.name }} &emsp; Submitted: {{ assignment.date_of_submission }}</button>
+      <div id="assignment-accordion-{{ forloop.counter }}" class="w3-hide w3-animate-zoom">
+      {% for question in questions %}
+
+        {% if assignment.name == question.quiz.name %}
+        <p><a href="#" class="w3-button w3-block w3-left-align">{{ question |truncatechars:30 }}</a></p>
+        {% endif %}
+        
+        {% empty %} <!-- empty variable for question for-loop -->
+        <p><a href="#" class="w3-button w3-block w3-left-align">No question(s)</a></p>
+      {% endfor %} <!-- end of question for-loop -->
+
+
+      <p><button class="w3-btn w3-teal js-add-question-assignment" data-href="{{ quiz.get_absolute_url }}">Add a new question</button></p>
+
+    </div>
+
+      {% empty %} <!-- empty variable for assignment for-loop -->
+      <button onclick="accordionFunction('Demo1')" class="w3-button w3-block w3-grey w3-left-align">No Assignment</button>
+      <div id="Demo1" class="w3-hide w3-animate-zoom">
+        <a href="#" class="w3-button w3-block w3-left-align">No Question(s)</a>
+      </div>
+      {% endfor %} <!-- end of assignment for-loop -->
+
+
+        
+    
+
+    </div>
+           
+
+{% endblock content %}
+
+{% block instructor_javascript %}
+
+<script src="{% static 'classroom/js/instructor/assignment.js' %}"></script>
+
+
+{% endblock instructor_javascript %}
