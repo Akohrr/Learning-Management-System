@@ -1,0 +1,8 @@
+{% for question in questions %}
+
+  <tr>
+    <td>{{forloop.counter}}</td>
+    <td>{{ question |truncatechars:30 }</td>
+  </tr>
+
+{% endfor %}

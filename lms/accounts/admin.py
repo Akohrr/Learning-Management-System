@@ -6,7 +6,7 @@ from .models import User
 #register your models here.
 
 class UserAdmin(admin.ModelAdmin):
-    form = UserCreationForm
+    # form = UserCreationForm
     list_filter = ('user_type',)
     list_display = ('first_name', 'last_name', 'username', 'email', 'user_type',)
 

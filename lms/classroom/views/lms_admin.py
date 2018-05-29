@@ -60,7 +60,7 @@ class SignUpView(CreateView):
             'lms_admin' : forms.LMSAdminSignUpForm,
             'instructor': forms.InstructorSignUpForm,
             'student'   : forms.StudentSignUpForm,
-            'course'    : forms.AddCourseForm,
+            'course'    : forms.CourseForm,
         }[choice]
         return form(**self.get_form_kwargs())
 

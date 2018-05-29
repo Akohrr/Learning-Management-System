@@ -1,6 +1,6 @@
 from django import forms
 from accounts.models import User 
-from .models import Course, Quiz
+from .models import Course, Quiz, Question
 from django.contrib.auth.forms import UserCreationForm
 # from django.contrib.auth.models import 
 from django.utils.translation import ugettext_lazy as _
@@ -62,7 +62,7 @@ class StudentSignUpForm(UserCreationForm):
         return user
 
 
-class AddCourseForm(forms.ModelForm):
+class CourseForm(forms.ModelForm):
 
     class Meta:
         model = Course
@@ -70,25 +70,52 @@ class AddCourseForm(forms.ModelForm):
 
     
     def __init__(self, *args, **kwargs):
-        super(AddCourseForm, self).__init__(*args, **kwargs)
+        super(CourseForm, self).__init__(*args, **kwargs)
         self.fields['instructors'].queryset = User.objects.filter(user_type='IN')
         self.fields['students'].queryset = User.objects.filter(user_type='ST')
         self.fields['teaching_assistants'].queryset = User.objects.filter(user_type='TA')
 
 
-class AddAssignmentForm(forms.ModelForm):
+class AssignmentForm(forms.ModelForm):
 
     class Meta:
         model = Quiz
-        exclude = ('comments',)
+        exclude = ('comment', 'owner', 'is_assignment',)
 
     def __init__(self, user, *args, **kwargs):
-        super(AddAssignmentForm, self).__init__(*args, **kwargs)
+        super(AssignmentForm, self).__init__(*args, **kwargs)
+        #declaring self.user so I can use (user) variable in save method
+        self.user = user
         self.fields['course'].queryset = Course.objects.filter(instructors=user)
     
     def save(self, commit=True):
         assignment = super().save(commit=False)
         assignment.is_assignment = True
+        assignment.owner = self.user
         if commit:
             assignment.save()
         return assignment 
+
+
+class QuestionForm(forms.ModelForm):
+
+    class Meta:
+        model = Question
+        exclude = ()
+
+    def clean_answer(self):
+        data = self.cleaned_data
+        for option in [data['first_option'], data['second_option'], data['third_option'], data['fourth_option']]:
+            if option == data['answer']:
+                return data['answer']
+
+        raise forms.ValidationError(_("Answer does not match any option"), code="no match")
+
+    
+    # def save(self, commit=True):
+        # assignment = super().save(commit=False)
+        # assignment.is_assignment = True
+        # assignment.owner = self.user
+        # if commit:
+        #     assignment.save()
+        # return assignment 

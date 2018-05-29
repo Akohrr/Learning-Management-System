@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from django.core.urlresolvers import reverse
 # Create your models here.
 
 
@@ -59,31 +60,39 @@ class Comments(models.Model):
 
 #used to handle both quiz and assignments
 class Quiz(models.Model):
-    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='quizzes')
-    name = models.CharField(max_length=255)
-    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='quiz')
-    comments = models.OneToOneField(Comments, on_delete=models.CASCADE, blank=True, null=True)
-    date_of_submission = models.DateTimeField()
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)#, related_name='quizzes')
+    name = models.CharField(max_length=255, unique=True)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)#, related_name='quiz')
+    comment = models.ManyToManyField(Comments)
+    date_of_submission = models.DateTimeField(help_text='Date and time of submission')
     is_assignment = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name
+
+    def get_absolute_url(self):
+        return reverse('classroom:add_question', kwargs={'choice':'quiz', 'pk': self.pk })
     
 
 class Question(models.Model):
-    quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE, related_name='questions')
+    quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)#, related_name='questions')
     text = models.CharField('Question', max_length=255)
+    first_option = models.TextField()
+    second_option = models.TextField()
+    third_option = models.TextField()
+    fourth_option = models.TextField()
+    answer = models.TextField(help_text='Copy the text of the correct option and past it here')
     def __str__(self):
         return self.text
 
 
-class Answer(models.Model):
-    question = models.ForeignKey(Question, on_delete=models.CASCADE, related_name='answers')
-    text = models.CharField('Answer', max_length=255)
-    is_correct = models.BooleanField('Correct answer', default=False)
+# class Answer(models.Model):
+#     question = models.ForeignKey(Question, on_delete=models.CASCADE, related_name='answers')
+#     text = models.CharField('Answer', max_length=255)
+#     is_correct = models.BooleanField('Correct answer', default=False)
 
-    def __str__(self):
-        return self.text
+#     def __str__(self):
+#         return self.text
     
 
 class Discussion(models.Model):
