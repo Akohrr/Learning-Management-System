@@ -2,7 +2,9 @@
 {% load static %}
 {% block boilerplate_html %}
 
-
+{% block css %}
+  <link rel="stylesheet" href="{% static 'classroom/css/student/styles.css' %}">
+{% endblock css %}
 
 <div class="w3-sidebar w3-light-grey w3-bar-block" style="width:25%">
   {% if user.is_authenticated %}
@@ -12,35 +14,32 @@
   {% endif %}
     <h3 class="w3-bar-item">Menu</h3>
 
+    <a href="{% url 'classroom:student_view' choice='courses' %}" class="w3-bar-item w3-button">Courses</a>
+    <a href="{% url 'classroom:student_view' choice='assignments' %}" class="w3-bar-item w3-button">Assignment</a>
+    <a href="{% url 'classroom:student_view' choice='quizzes' %}" class="w3-bar-item w3-button">Quiz</a>
+    <a href="{% url 'classroom:student_view' choice='grades' %}" class="w3-bar-item w3-button">Grades</a>
+    <a href="{% url 'classroom:student_view' choice='discussions' %}" class="w3-bar-item w3-button">Comments</a>
 
-    <a href="{% url 'classroom:lms_admin_view' choice='lms-admins' %}" class="w3-bar-item w3-button">Admin Staff</a>
-    <a href="{% url 'classroom:lms_admin_view' choice='instructors' %}" class="w3-bar-item w3-button">Instructor</a>
-    <a href="{% url 'classroom:lms_admin_view' choice='students' %}" class="w3-bar-item w3-button">Students</a>
-    <a href="{% url 'classroom:lms_admin_view' choice='courses' %}" class="w3-bar-item w3-button">Courses</a>
 
 
+</div>
 
-  </div>
-  
   <!-- Page Content -->
-  <div style="margin-left:25%">
-    <div class="w3-container w3-teal">
-      <h1>Learning Management System portal</h1>
-    </div>
+<div style="margin-left:25%">
+<div class="w3-container w3-teal">
+    <h1>Learning Management System portal</h1>
+</div>
 
 
-
-
-      <div class="w3-container">
+<div class="w3-container">
 
         <h2> {% block choice %}
-          <!-- Type to be inserted here(Admin/Instructors/Students/Courses) -->
+          <!-- Type to be inserted here(Assigments/Quiz/Grades/Comments) -->
         {% endblock choice %}  </h2>
 
         <br>
           {% block add_button %}
-          <button id="js-add-new-choice-btn" class="w3-button w3-black">Add new </button>
-
+          <button id="js-add-new-choice-btn" class="w3-button w3-black">Add new</button>
           {% endblock add_button %}
           <div id="token">
             {% csrf_token %}
@@ -71,11 +70,10 @@
   <!-- javascript file used by all classroom sub pages -->
   <script src="{% static 'classroom/js/main.js' %}"></script>
 
-  <!-- block to include javascript files of lms_admin sub pages particular to one page -->
-  {% block lms_admin_javascript %}
+  <!-- block to include javascript files of student sub pages particular to one page -->
+  {% block student_javascript %}
   
-  {% endblock lms_admin_javascript %}
+  {% endblock student_javascript %}
 
 
   {% endblock javascript %}
-

@@ -14,7 +14,7 @@ class Module(models.Model):
 
 
 
-#content of the course refers to modules
+#modules refers to content of the course 
 class Course(models.Model):
     title = models.CharField(max_length=255)
     code = models.CharField(max_length=6, unique=True, primary_key=True)
@@ -44,26 +44,18 @@ class Grade(models.Model):
 
 
 
-class Comments(models.Model):
+class Comment(models.Model):
     created = models.DateTimeField(auto_now=True)
     body = models.TextField()
     author = models.OneToOneField(settings.AUTH_USER_MODEL)
 
 
-# class Assignment(models.Model):
-#     created = models.DateTimeField(auto_now=True)
-#     content = models.ManyToManyField(Content)
-#     comments = models.OneToOneField(Comments, on_delete=models.CASCADE)
-#     created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-#     course = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-
-
 #used to handle both quiz and assignments
-class Quiz(models.Model):
-    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)#, related_name='quizzes')
+class QuizOrAssignment(models.Model):
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     name = models.CharField(max_length=255, unique=True)
-    course = models.ForeignKey(Course, on_delete=models.CASCADE)#, related_name='quiz')
-    comment = models.ManyToManyField(Comments)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    comment = models.ManyToManyField(Comment, blank=True)
     date_of_submission = models.DateTimeField(help_text='Date and time of submission')
     is_assignment = models.BooleanField(default=False)
 
@@ -73,10 +65,11 @@ class Quiz(models.Model):
     def get_absolute_url(self):
         return reverse('classroom:instructor_add_question', kwargs={'choice':'quiz', 'pk': self.pk })
     
-
+    def get_absolute_url_student(self):
+        pass
 class Question(models.Model):
-    quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)#, related_name='questions')
-    text = models.CharField('Question', max_length=255)
+    quiz = models.ForeignKey(QuizOrAssignment, on_delete=models.CASCADE)
+    text = models.TextField('Question')
     first_option = models.TextField('A')
     second_option = models.TextField('B')
     third_option = models.TextField('C')
@@ -86,18 +79,9 @@ class Question(models.Model):
         return self.text
 
 
-# class Answer(models.Model):
-#     question = models.ForeignKey(Question, on_delete=models.CASCADE, related_name='answers')
-#     text = models.CharField('Answer', max_length=255)
-#     is_correct = models.BooleanField('Correct answer', default=False)
-
-#     def __str__(self):
-#         return self.text
-    
-
 class Discussion(models.Model):
     title = models.CharField(max_length=30)
-    comments = models.OneToOneField(Comments, on_delete=models.CASCADE)
+    comments = models.OneToOneField(Comment, on_delete=models.CASCADE)
     created_by = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     course = models.ForeignKey(Course, on_delete=models.CASCADE, null=True)
 

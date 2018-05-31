@@ -1,16 +1,19 @@
 from django.contrib import admin
-from .models import Comments, Course, Quiz
+from accounts.models import User
+from .models import Comment, Course, QuizOrAssignment, Question
 from .forms import CourseForm
-# Register your models here.
 
-admin.site.register(Comments)
 
-admin.site.register(Quiz)
+admin.site.register(Comment)
 
-class CouseAdmin(admin.ModelAdmin):
+admin.site.register(QuizOrAssignment)
+
+class CourseAdmin(admin.ModelAdmin):
+
     form = CourseForm
+    list_display = ('code', 'title',)
 
 
-admin.site.register(Course, CouseAdmin)
+admin.site.register(Course, CourseAdmin)
 
-# admin.site.register(Content)
+admin.site.register(Question)

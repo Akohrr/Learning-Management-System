@@ -43,8 +43,8 @@ INSTALLED_APPS = [
 
     #3rd party apps
     'widget_tweaks',
-    # 'ajax_select',
-    'select2',
+    'guardian',
+
     #admin app
     'django.contrib.admin',
 
@@ -142,3 +142,8 @@ STATICFILES_DIRS = [
 AUTH_USER_MODEL = 'accounts.User'
 
 LOGIN_REDIRECT_URL = '/classroom/home/'
+
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'guardian.backends.ObjectPermissionBackend',
+)

@@ -1,13 +1,11 @@
 from django import forms
 from accounts.models import User 
-from .models import Course, Quiz, Question
+from .models import Course, QuizOrAssignment, Question
 from django.contrib.auth.forms import UserCreationForm
-# from django.contrib.auth.models import 
 from django.utils.translation import ugettext_lazy as _
-# from ajax_select.fields import AutoCompleteSelectMultipleField
-# import select2
-# from select2.forms import Select2Widget
 
+
+# TODO: refactor signupform to add user instance to group after saving 
 
 class LMSAdminSignUpForm(UserCreationForm):
     first_name = forms.CharField(max_length=30)
@@ -79,7 +77,7 @@ class CourseForm(forms.ModelForm):
 class AssignmentForm(forms.ModelForm):
 
     class Meta:
-        model = Quiz
+        model = QuizOrAssignment
         exclude = ('comment', 'owner', 'is_assignment',)
 
     def __init__(self, user, *args, **kwargs):
@@ -100,7 +98,7 @@ class AssignmentForm(forms.ModelForm):
 class QuizForm(forms.ModelForm):
 
     class Meta:
-        model = Quiz
+        model = QuizOrAssignment
         exclude = ('comment', 'owner', 'is_assignment',)
 
     def __init__(self, user, *args, **kwargs):
@@ -138,25 +136,51 @@ class QuestionForm(forms.ModelForm):
 
     def clean_answer(self):
         data = self.cleaned_data
-        try:
-            real_answer = {
-                'A': data['first_option'],
-                'B': data['second_option'],
-                'C': data['third_option'],
-                'D': data['fourth_option'],
-            }[data['answer'].title()]
-        except:
+        correct_option = data['answer'].title()
+        if correct_option not in ['A', 'B', 'C', 'D']:
             raise forms.ValidationError(_("Answer does not match any option"), code="no match")
 
-        data['answer'] = real_answer
-        return data
+        return correct_option
 
 
 
     def save(self, commit=True):
-        quiz=Quiz.objects.get(pk=self.pk)
+        quiz=QuizOrAssignment.objects.get(pk=self.pk)
         question = super().save(commit=False)
         question.quiz = quiz
         if commit:
             question.save()
         return question
+
+
+class StudentQuestionForm(forms.ModelForm):
+    answer= forms.CharField(max_length=1)
+    class Meta:
+        model = Question
+        exclude = ('quiz', 'answer',)
+
+        widgets = {
+            'text'          : forms.Textarea(attrs={'readonly':'readonly'}),
+            'first_option'  : forms.Textarea(attrs={'readonly':'readonly'}),
+            'second_option' : forms.Textarea(attrs={'readonly':'readonly'}),
+            'third_option'  : forms.Textarea(attrs={'readonly':'readonly'}),
+            'fourth_option' : forms.Textarea(attrs={'readonly':'readonly'}),
+        }
+
+class BaseQuestionFormSet(forms.BaseModelFormSet):
+    score = 0
+    def clean(self):
+        super().clean()
+
+        for form in self.forms:
+            # if form.cleaned_data['answer']:
+            try: 
+                student_option = form.cleaned_data['answer']
+                correct_answer = form.instance.answer
+                if student_option == correct_answer:
+                    self.score += 1
+            except:
+                raise forms.ValidationError(_('All questions must be answered'))
+
+
+QuestionFormSet = forms.modelformset_factory(Question, form=StudentQuestionForm,extra=0, can_delete=False, formset=BaseQuestionFormSet)

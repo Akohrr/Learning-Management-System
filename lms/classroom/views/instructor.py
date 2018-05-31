@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.views.generic import CreateView, ListView
-from ..models import Quiz, Question
+from ..models import QuizOrAssignment, Question
 from .. import forms
 from django.http import JsonResponse
 from django.template.loader import render_to_string
@@ -23,16 +23,11 @@ class ChoiceList(ListView):
 
     def get_template_names(self):
         template = {
-            'quiz'       : r'classroom/instructor/quiz.html',
+            'quizzes'    : r'classroom/instructor/quizzes.html',
             'assignments': r'classroom/instructor/assignments.html',
             'grades'     : r'classroom/instructor/grades.html',
             }[self.kwargs['choice']]
         return [template]
-
-
-
-
-
 
 
 class Choice(CreateView):
@@ -40,7 +35,6 @@ class Choice(CreateView):
 
     def get_form(self, form_class=None):
         choice = self.kwargs['choice']
-
         form = {
             'assignment': forms.AssignmentForm,
             'quiz'      : forms.QuizForm,
@@ -110,14 +104,18 @@ class QuestionHandler(CreateView):
 
 
 def get_context_variables(choice, user=None):
-    if choice == 'quiz':
-        quiz = Quiz.objects.filter(is_assignment=False, owner=user).order_by('date_of_submission')[:21]
-        questions = Question.objects.filter(quiz__owner=user)
-        context = {'quizes': quiz, 'questions':questions}
-    elif choice == 'assignments':
-        assignments = Quiz.objects.filter(is_assignment=True, owner=user).order_by('date_of_submission')[:21]
-        questions = Question.objects.filter(quiz__owner=user)
-        context = {'assignments': assignments, 'questions':questions}
+    if user.user_type == 'IN':
+        if choice == 'quizzes':
+            quiz = QuizOrAssignment.objects.filter(is_assignment=False, owner=user).order_by('date_of_submission')[:21]
+            questions = Question.objects.filter(quiz__owner=user)
+            context = {'quizzes': quiz, 'questions':questions}
+        elif choice == 'assignments':
+            assignments = QuizOrAssignment.objects.filter(is_assignment=True, owner=user).order_by('date_of_submission')[:21]
+            questions = Question.objects.filter(quiz__owner=user)
+            context = {'assignments': assignments, 'questions':questions}
 
 
-    return context
+        return context
+    
+    else:
+        return -1

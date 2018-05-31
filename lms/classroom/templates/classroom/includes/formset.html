@@ -1,0 +1,50 @@
+{% load widget_tweaks %}
+
+{{ formset.management_form }}
+
+{{ formset.non_form_errors.as_ul}}
+<table class="w3-table">
+    {% for form in formset.forms %}
+        {{form.id}}
+        {% if forloop.first %}
+            <thead>
+                <tr>
+                    
+                    {% for field in form.visible_fields %}
+                       
+                        <th>{{ field.label|capfirst }}</th>
+                    {% endfor %}
+                        
+                </tr>
+            </thead>
+        {% endif %}
+
+        <tr>
+        {% for field in form.visible_fields %}
+
+
+        {% if form.is_bound %}
+        
+            {% if field.errors %}
+
+                <td> {% render_field field class="w3-input w3-round w3-border w3-border-red" %}</td>
+            
+            {% else %}
+
+                <td>{% render_field field class="w3-input w3-round w3-border w3-border-green" %}</td>
+
+            {% endif %}
+
+            {% else %}
+
+            <td>{% render_field field class="w3-input w3-round w3-border"  %}</td>
+
+        {% endif %}
+        
+            
+        {% endfor %}
+        </tr>
+            
+            
+    {% endfor %}
+</table>

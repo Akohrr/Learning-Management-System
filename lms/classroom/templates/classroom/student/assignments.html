@@ -1,0 +1,104 @@
+{% extends "classroom/student_base.html" %}
+
+{% load static %}
+
+{% block choice %}
+    Assignments
+    <p>List of all the assignments</p>
+{% endblock choice %}
+
+{% block add_button %}
+
+{% endblock add_button %}
+
+{% block content %}
+
+    <div class="w3-section w3-container">
+
+
+        <div class="w3-bar w3-grey">
+            <button class="w3-bar-item w3-button tablink w3-teal" onclick="openStatus(event,'Pending')">Pending</button>
+            <button class="w3-bar-item w3-button tablink" onclick="openStatus(event,'Submitted')">Submitted</button>
+        </div>
+            
+        <div id="Pending" class="w3-container w3-border status">
+            <h2>Pending assignments</h2>
+            <!-- content -->
+
+                    
+        <table class="w3-table w3-bordered">
+                <thead>
+                <tr>
+                <th>Assignment name</th>
+                <th>Course</th>
+                <th>Date of submission</th>
+                </tr>
+                </thead>
+    
+                <tbody>
+                {% for assignment in pending_assignments %}
+                <tr class="w3-hover-teal js-update-soul" data-href="{{user.get_absolute_url}}">
+                <td>{{assignment.name}}</td>
+                <td>{{assignment.course.code}}</td>
+                <td>{{assignment.date_of_submission}}</td>
+                </tr>
+    
+                {% empty %}
+                <tbody>
+                    <tr>
+                        <td colspan="3" class="w3-grey w3-center">No data to display</td>
+                    </tr>
+                </tbody>
+                {% endfor %}
+                </tbody>
+    
+            </table>
+
+        </div>
+
+        <div id="Submitted" class="w3-container w3-border status" style="display:none">
+            <h2>Submitted assignments</h2>
+            <!-- content -->
+                    
+            <table class="w3-table w3-bordered">
+                    <thead>
+                    <tr>
+                    <th>Assignment name</th>
+                    <th>Course</th>
+                    <th>Date of submission</th>
+                    </tr>
+                    </thead>
+        
+                    <tbody>
+                    {% for assignment in submitted_assignments %}
+                    <tr class="w3-hover-teal js-update-soul" data-href="{{user.get_absolute_url}}">
+                    <td>{{assignment.name}}</td>
+                    <td>{{assignment.course.code}}</td>
+                    <td>{{assignment.date_of_submission}}</td>
+                    </tr>
+        
+                    {% empty %}
+                    <tbody>
+                        <tr>
+                            <td colspan="3" class="w3-grey w3-center">No data to display</td>
+                        </tr>
+                    </tbody>
+                    {% endfor %}
+                </tbody>
+        
+            </table>
+
+        </div>
+            
+        
+
+    </div>
+
+{% endblock content %}
+
+{% block student_javascript %}
+
+<script src="{% static 'classroom/js/student/assignments.js' %}"></script>
+
+
+{% endblock student_javascript %}

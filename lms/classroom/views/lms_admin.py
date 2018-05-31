@@ -12,7 +12,7 @@ from django.views.generic.edit import FormMixin
 from .. models import Course
 
 
-class UserList(ListView):
+class ChoiceList(ListView):
 
     def get_context_object_name(self, object_list):
         object_name = self.kwargs['choice']
@@ -85,6 +85,3 @@ class SignUpView(CreateView):
             'classroom/includes/modal.html', context)
         return JsonResponse(self.info)
 
-
-# class used to handle creation of courses
-# class 

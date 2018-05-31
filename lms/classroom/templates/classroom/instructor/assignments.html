@@ -14,7 +14,7 @@
     <div class="w3-section w3-container">
 
       {% for assignment in assignments %} <!-- beginning of assignment for-loop -->
-      <button onclick="accordionFunction('assignment-accordion-{{ forloop.counter }}')" class="w3-button w3-block w3-grey w3-left-align">{{ assignment.name }} &emsp; Submitted: {{ assignment.date_of_submission }}</button>
+      <button onclick="accordionFunction('assignment-accordion-{{ forloop.counter }}')" class="w3-button w3-block w3-light-grey w3-left-align">{{ assignment.name }} <span class="w3-right">Date of submission: {{ assignment.date_of_submission }}</span></button>
       <div id="assignment-accordion-{{ forloop.counter }}" class="w3-hide w3-animate-zoom">
       {% for question in questions %}
 
@@ -27,7 +27,7 @@
       {% endfor %} <!-- end of question for-loop -->
 
 
-      <p><button class="w3-btn w3-teal js-add-question-assignment" data-href="{{ quiz.get_absolute_url }}">Add a new question</button></p>
+      <p><button class="w3-btn w3-teal js-add-question-assignment" data-href="{{ assignment.get_absolute_url }}">Add a new question</button></p>
 
     </div>
 
@@ -49,7 +49,7 @@
 
 {% block instructor_javascript %}
 
-<script src="{% static 'classroom/js/instructor/assignment.js' %}"></script>
+<script src="{% static 'classroom/js/instructor/assignments.js' %}"></script>
 
 
 {% endblock instructor_javascript %}

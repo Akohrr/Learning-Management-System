@@ -13,8 +13,8 @@
 
     <div class="w3-section w3-container">
 
-      {% for quiz in quizes %} <!-- beginning of quiz for-loop -->
-      <button onclick="accordionFunction('quiz-accordion-{{ forloop.counter }}')" class="w3-button w3-block w3-grey w3-left-align">{{ quiz.name }} &emsp; Submitted: {{ quiz.date_of_submission }}</button>
+      {% for quiz in quizzes %} <!-- beginning of quiz for-loop -->
+      <button onclick="accordionFunction('quiz-accordion-{{ forloop.counter }}')" class="w3-button w3-block w3-light-grey w3-left-align">{{ quiz.name }} <span class="w3-right">Date of submission: {{ quiz.date_of_submission }}</span></button>
       <div id="quiz-accordion-{{ forloop.counter }}" class="w3-hide w3-animate-zoom">
       {% for question in questions %}
 
@@ -39,33 +39,6 @@
       {% endfor %} <!-- end of quiz for loop -->
 
 
-        
-       <!--  <div id="quiz-modal" class="w3-modal">
-            <div class="w3-modal-content">
-              <header class="w3-container w3-teal"> 
-                <span id="js-close-quiz-modal" 
-                class="w3-button w3-display-topright">&times;</span>
-                <h2 id="quiz-modal-title">Quiz</h2>
-              </header>
-              <div class="w3-container">
-                  <h2>Questions</h2>
-          <table class="w3-table w3-striped">
-
-            <tr>
-                <th>#</th>
-                <th>Question</th>
-            </tr>
-
-            {% include "classroom/instructor/question_list.html" %}
-
-          </table>
-          <button id="js-question-btn">Add new Question</button> <br>
-            </div>
-              <footer class="w3-container w3-teal">
-                <p>Modal Footer</p>
-              </footer>
-            </div>
-          </div>  -->
 
     </div>
            
@@ -74,7 +47,7 @@
 
 {% block instructor_javascript %}
 
-<script src="{% static 'classroom/js/instructor/quiz.js' %}"></script>
+<script src="{% static 'classroom/js/instructor/quizzes.js' %}"></script>
 
 
 {% endblock instructor_javascript %}

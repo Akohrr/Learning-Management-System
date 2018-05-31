@@ -13,10 +13,10 @@
     <h3 class="w3-bar-item">Menu</h3>
 
 
-    <a href="/classroom/instructor/assignments/" class="w3-bar-item w3-button">Assignment</a>
-    <a href="/classroom/instructor/quiz/" class="w3-bar-item w3-button">Quiz</a>
-    <a href="/classroom/instructor/grades/" class="w3-bar-item w3-button">Grades</a>
-    <a href="/classroom/instructor/comments/" class="w3-bar-item w3-button">Comments</a>
+    <a href="{% url 'classroom:instructor_view' choice='assignments' %}" class="w3-bar-item w3-button">Assignment</a>
+    <a href="{% url 'classroom:instructor_view' choice='quizzes' %}" class="w3-bar-item w3-button">Quiz</a>
+    <a href="{% url 'classroom:instructor_view' choice='grades' %}" class="w3-bar-item w3-button">Grades</a>
+    <a href="{% url 'classroom:instructor_view' choice='discussions' %}" class="w3-bar-item w3-button">Comments</a>
 
 
 
