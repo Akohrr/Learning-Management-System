@@ -2,17 +2,16 @@
 {% load static %}
 
 {% block choice %}
-    Discussion
+    Discussions
 {% endblock choice %}
 
 {% block add_button %}
-<button id="js-add-new-choice-btn" class="w3-button w3-black" data-href="{% url 'classroom:instructor_add' choice='discussion' %}">Add new discussion</button>
+
 {% endblock add_button %}
 
 {% block content %}
 
     <div class="w3-section w3-container">
-
         <p>Click on the discussion to view the comments</p>
 
       {% for discussion in discussions %} <!-- beginning of discussion for-loop -->
@@ -51,7 +50,7 @@
 
 {% block instructor_javascript %}
 
-<script src="{% static 'classroom/js/instructor/discussions.js' %}"></script>
+<script src="{% static 'classroom/js/student/discussions.js' %}"></script>
 
 
 {% endblock instructor_javascript %}

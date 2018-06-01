@@ -6,7 +6,7 @@ from django.views.generic.edit import CreateView
 from ..forms import QuestionFormSet
 from django.http import JsonResponse
 from django.template.loader import render_to_string
-from classroom.models import Question, Grade, QuizOrAssignment
+from classroom.models import Question, Grade, QuizOrAssignment, Discussion, Comment
 
 
 class ChoiceList(ListView):
@@ -75,6 +75,10 @@ def get_context_variables(choice, user=None):
             pending_quizzes = QuizOrAssignment.objects.filter(date_of_submission__gt=timezone.now(), course__students=user, is_assignment=False)
             submitted_quizzes = QuizOrAssignment.objects.filter(date_of_submission__lt=timezone.now(), course__students=user, is_assignment=False)
             context = {'pending_quizzes': pending_quizzes, 'submitted_quizzes': submitted_quizzes}
+        elif choice == 'discussions':
+            discussions = Discussion.objects.filter(course__students=user)
+            comments = Comment.objects.filter(discussion__course__students=user)
+            context = {'discussions':discussions, 'comments':comments}
         else:
             return -1
 

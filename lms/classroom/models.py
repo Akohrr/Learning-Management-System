@@ -74,7 +74,8 @@ class Discussion(models.Model):
         return self.title
 
     def get_absolute_url(self):
-        return reverse('classroom:instructor_add_question', kwargs={'choice':'discussion', 'pk': self.pk })
+        #choice represents discussion
+        return reverse('classroom:instructor_add_choice', kwargs={'choice':'discussion', 'pk': self.pk })
 
 
 class Comment(models.Model):

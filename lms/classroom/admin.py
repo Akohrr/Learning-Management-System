@@ -1,6 +1,6 @@
 from django.contrib import admin
 from accounts.models import User
-from .models import Comment, Course, QuizOrAssignment, Question
+from .models import Comment, Course, QuizOrAssignment, Question, Discussion
 from .forms import CourseForm
 
 
@@ -17,3 +17,6 @@ class CourseAdmin(admin.ModelAdmin):
 admin.site.register(Course, CourseAdmin)
 
 admin.site.register(Question)
+
+
+admin.site.register(Discussion)
