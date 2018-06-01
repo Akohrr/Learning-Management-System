@@ -89,9 +89,12 @@ def get_context_variables(choice, user=None):
 
 
 def  grade(user, code, score):
-    try:
-        grade = Grade.objects.get(quiz=Quiz.objects.get(code=code))
+    # try:
+        #check if a grade exists for a student in that particular course
+    if Grade.objects.get(student=user, course__code=code).exists():
         print(grade)
         return -1
-    except:
-        pass
+    else:
+        #if grade does not exist create a new grade for the student in the particular course
+        course = Course.objects.get(code=code)
+        Grade.objects.create(sudent=user, course=course, score=score)

@@ -8,10 +8,8 @@ The system is made up of 3 major users: admin, instructors and students. Each us
 
 ### Prerequisites
 
-[![Python Version](https://img.shields.io/badge/python-3.6-brightgreen.svg)](https://python.org)
-
-[![Django Version](https://img.shields.io/badge/django-1.11-brightgreen.svg)](https://djangoproject.com)
-
+[![Python Version](https://img.shields.io/badge/python-3.6-brightgreen.svg)](https://python.org) &nbsp;
+[![Django Version](https://img.shields.io/badge/django-1.11-brightgreen.svg)](https://djangoproject.com) &nbsp;
 [![Virtualenvwrapper](https://img.shields.io/badge/virtualenvwrapper-stable-brightgreen.svg)](http://virtualenvwrapper.readthedocs.io/en/latest/install.html)
 
 
