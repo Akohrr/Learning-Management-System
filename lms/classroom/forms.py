@@ -1,6 +1,6 @@
 from django import forms
 from accounts.models import User 
-from .models import Course, QuizOrAssignment, Question, Discussion
+from .models import Course, QuizOrAssignment, Question, Discussion, Comment
 from django.contrib.auth.forms import UserCreationForm
 from django.utils.translation import ugettext_lazy as _
 
@@ -211,8 +211,8 @@ class DiscussionForm(forms.ModelForm):
 
 class CommentForm(forms.ModelForm):
     class Meta:
-        model = Question
-        exclude = ('author',)
+        model = Comment
+        exclude = ('author', 'discussion',)
 
 
     def __init__(self, pk, user, *args, **kwargs):
@@ -225,6 +225,7 @@ class CommentForm(forms.ModelForm):
     def save(self, commit=True):
         discussion=Discussion.objects.get(pk=self.pk)
         comment = super().save(commit=False)
+        comment.author = self.user
         comment.discussion = discussion
         if commit:
             comment.save()

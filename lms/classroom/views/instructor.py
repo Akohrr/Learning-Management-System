@@ -68,20 +68,29 @@ class Choice(CreateView):
         return JsonResponse(self.info)
 
 
-class QuestionHandler(CreateView):
+class QuestionAndCommentHandler(CreateView):
     info = dict()
-    form_class = forms.QuestionForm
+
+    def get_form(self, form_class=None):
+        choice = self.kwargs['choice']
+        form = {
+            'quiz'      : forms.QuestionForm,
+            'discussion' : forms.CommentForm,
+        }[choice]
+        return form(**self.get_form_kwargs())
 
     def get_form_kwargs(self):
-        form_kwargs  = super(QuestionHandler, self).get_form_kwargs()
+        form_kwargs  = super(QuestionAndCommentHandler, self).get_form_kwargs()
         form_kwargs['user'] = self.request.user
         form_kwargs['pk'] = self.kwargs['pk']
         return form_kwargs
 
     def get(self, request, *args, **kwargs):
         path = request.META.get('PATH_INFO')
+        choice = ('Comment' if kwargs['choice'] == 'discussion' else 'Question')
+
         form = self.get_form()
-        context = {'path': path, 'form': form, 'choice': 'Question'}
+        context = {'path': path, 'form': form, 'choice':choice}
         self.info['html_form'] = render_to_string(
             'classroom/includes/new_form_modal.html', context)
         return JsonResponse(self.info)
@@ -93,7 +102,8 @@ class QuestionHandler(CreateView):
 
     def form_invalid(self, form):
         path = self.request.META.get('PATH_INFO')
-        context = {'path': path, 'form': form, 'choice': 'Question'}
+        choice = ('Comment' if self.kwargs['choice'] == 'discussion' else 'Question')
+        context = {'path': path, 'form': form, 'choice': choice}
         self.info['valid'] = False
         self.info['html_form'] = render_to_string(
             'classroom/includes/new_form_modal.html', context)

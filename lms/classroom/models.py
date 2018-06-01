@@ -29,19 +29,13 @@ class Course(models.Model):
         return '{0}'.format(self.code)
 
 class Grade(models.Model):
-    GRADE_CHOICES = (
-        ('A', 'A(80-100)'),
-        ('B', 'B(70-79)'),
-        ('C', 'C(60-69)'),
-        ('D', 'D(50-59)'),
-        ('E', 'E(40-49)'),
-        ('F', 'F(30-39)'),
-    )
-    grade = models.SmallIntegerField(default=0)
+    score = models.SmallIntegerField(default=0)
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     student =  models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
 
+class Assignment(models.Model):
+    pass
 
 
 #used to handle both quiz and assignments
@@ -57,9 +51,6 @@ class QuizOrAssignment(models.Model):
 
     def get_absolute_url(self):
         return reverse('classroom:instructor_add_question', kwargs={'choice':'quiz', 'pk': self.pk })
-    
-    def get_absolute_url_student(self):
-        pass
 
         
 class Question(models.Model):
@@ -82,6 +73,9 @@ class Discussion(models.Model):
     def __str__(self):
         return self.title
 
+    def get_absolute_url(self):
+        return reverse('classroom:instructor_add_question', kwargs={'choice':'discussion', 'pk': self.pk })
+
 
 class Comment(models.Model):
     discussion = models.ForeignKey(Discussion, on_delete=models.CASCADE, default=None, null=True)
@@ -89,3 +83,5 @@ class Comment(models.Model):
     body = models.TextField()
     author = models.ForeignKey(settings.AUTH_USER_MODEL)
     
+    def __str__(self):
+        return self.body

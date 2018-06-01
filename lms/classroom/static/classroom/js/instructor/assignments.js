@@ -12,20 +12,20 @@ $(document).ready(function () {
 
 
 
-    $("#js-add-new-choice-btn").click( function () {
-      button = $(this);
-        $.ajax({
-          url: button.attr("data-href"),
-          type: 'get',
-          dataType: 'json',
+    // $("#js-add-new-choice-btn").click( function () {
+    //   button = $(this);
+    //     $.ajax({
+    //       url: button.attr("data-href"),
+    //       type: 'get',
+    //       dataType: 'json',
         
-          success: function (data) {
-            $("#js-add-new-choice-modal").show();
-            $("#display-form-content").html(data.html_form);
-          }
+    //       success: function (data) {
+    //         $("#js-add-new-choice-modal").show();
+    //         $("#display-form-content").html(data.html_form);
+    //       }
     
-        });
-      });
+    //     });
+    //   });
 
       
 
@@ -47,24 +47,6 @@ $(document).ready(function () {
     });
 
 
-
-
-
-    $("#soulsTable").on("click", "tbody tr ", function () {
-        var row = $(this);
-        rowUrl = row.attr("data-href");
-        $.ajax({
-          type: "get",
-          url: row.attr("data-href"),
-          dataType: 'json',
-          success: function (data){
-            $(".form-data").html(data.html_form);
-            $("#js-update-soul-modal").css('display', 'block');
-    
-          }
-        });
-    
-      });
 
 
 });

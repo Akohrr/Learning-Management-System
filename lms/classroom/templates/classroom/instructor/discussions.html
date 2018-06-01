@@ -14,27 +14,27 @@
     <div class="w3-section w3-container">
 
       {% for discussion in discussions %} <!-- beginning of discussion for-loop -->
-      <button onclick="accordionFunction('discussion-accordion-{{ forloop.counter }}')" class="w3-button w3-block w3-light-grey w3-left-align">{{ discussion.name }} <span class="w3-right">Date of submission: {{ discussion.date_of_submission }}</span></button>
+      <button onclick="accordionFunction('discussion-accordion-{{ forloop.counter }}')" class="w3-button w3-block w3-light-grey w3-left-align">{{ discussion.title }}</button>
       <div id="discussion-accordion-{{ forloop.counter }}" class="w3-hide w3-animate-zoom">
-      {% for question in questions %}
+      {% for comment in comments %}
 
-        {% if discussion.name == question.quiz.name %}
-        <p><a href="#" class="w3-button w3-block w3-left-align">{{ question |truncatechars:30 }}</a></p>
+        {% if discussion.title == comment.discussion.title %}
+        <p><a href="#" class="w3-button w3-block w3-left-align">{{ comment |truncatechars:30 }}  <span class="w3-right">By: {{ comment.author }}</span></a></p>
         {% endif %}
         
         {% empty %} <!-- empty variable for question for-loop -->
-        <p><a href="#" class="w3-button w3-block w3-left-align">No question(s)</a></p>
+        <p><a href="#" class="w3-button w3-block w3-left-align">No comment(s)</a></p>
       {% endfor %} <!-- end of question for-loop -->
 
 
-      <p><button class="w3-btn w3-teal js-add-question-discussion" data-href="{{ discussion.get_absolute_url }}">Add a new question</button></p>
+      <p><button class="w3-btn w3-teal js-add-comment-discussion" data-href="{{ discussion.get_absolute_url }}">Add a new comment</button></p>
 
     </div>
 
       {% empty %} <!-- empty variable for discussion for-loop -->
       <button onclick="accordionFunction('Demo1')" class="w3-button w3-block w3-grey w3-left-align">No Discussion</button>
       <div id="Demo1" class="w3-hide w3-animate-zoom">
-        <a href="#" class="w3-button w3-block w3-left-align">No Question(s)</a>
+        <a href="#" class="w3-button w3-block w3-left-align">No comment(s)</a>
       </div>
       {% endfor %} <!-- end of discussion for-loop -->
 
