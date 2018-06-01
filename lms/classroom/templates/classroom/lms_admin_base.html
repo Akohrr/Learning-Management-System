@@ -6,7 +6,7 @@
 
 <div class="w3-sidebar w3-light-grey w3-bar-block" style="width:25%">
   {% if user.is_authenticated %}
-    <h3 class="w3-bar-item">Welcome {{user.first_name}}, {{user.last_name}} (<a href="/accounts/logout/">Logout</a>)</h3>
+    <h3 class="w3-bar-item">Welcome {{user.first_name}}, {{user.last_name}} (<a href="{%url 'accounts:logout' %}">Logout</a>)</h3>
   {% else %}
   
   {% endif %}

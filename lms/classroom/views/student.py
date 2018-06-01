@@ -6,7 +6,7 @@ from django.views.generic.edit import CreateView
 from ..forms import QuestionFormSet
 from django.http import JsonResponse
 from django.template.loader import render_to_string
-from classroom.models import Question
+from classroom.models import Question, Grade, QuizOrAssignment
 
 
 class ChoiceList(ListView):
@@ -30,53 +30,6 @@ class ChoiceList(ListView):
         return [template]
 
 
-
-class TakeQuizOrAssignment(CreateView):
-    info = dict()
-
-    def get_form(self, form_class=None):
-        code = self.kwargs['code']
-        # form = {
-        #     'assignment': forms.AssignmentForm,
-        #     'quiz'      : forms.QuizForm,
-        #     # 'grade'     : forms.GradeForm,
-        #     # 'comment'   : forms.CommentForm,
-        # }[choice]
-        formset = QuestionFormSet(queryset=Question.objects.filter(quiz__course__code=code))
-        return formset(**self.get_form_kwargs())
-
-
-    # def get_form_kwargs(self):
-    #     form_kwargs  = super(TakeQuizOrAssignment, self).get_form_kwargs()
-    #     form_kwargs['user'] = self.request.user
-    #     return form_kwargs
-
-    def get(self, request, *args, **kwargs):
-        path = request.META.get('PATH_INFO')
-        form = self.get_form()
-        context = {'path': path, 'form': form, 'choice': self.kwargs['choice']}
-        self.info['html_form'] = render_to_string(
-            'classroom/includes/new_form_modal.html', context)
-        return JsonResponse(self.info)
-
-    def form_valid(self, form):
-        form.save()
-        self.info['valid'] = True
-        return JsonResponse(self.info)
-
-    def form_invalid(self, form):
-        path = self.request.META.get('PATH_INFO')
-        context = {'path': path, 'form': form, 'choice': self.kwargs['choice']}
-        self.info['valid'] = False
-        self.info['html_form'] = render_to_string(
-            'classroom/includes/new_form_modal.html', context)
-        return JsonResponse(self.info)
-
-
-
-
-
-
 def take_questions(request, code):
     """
     Extracts data of Souls from excel sheet and convert to Json object
@@ -84,15 +37,17 @@ def take_questions(request, code):
     info = dict()
     formset = QuestionFormSet(queryset=Question.objects.filter(quiz__course__code=code))
     path = request.META.get('PATH_INFO')
-    # print(formset)
-    # import time
-    # time.sleep(6000)
+    score = 0
     if request.method == 'POST':
         formset = QuestionFormSet(request.POST)
         if formset.is_valid():
-            print(formset)
-            import time
-            time.sleep(6000)
+            for form in formset:
+                print(form.instance.answer)
+                student_option = form.cleaned_data['answer']
+                correct_option = form.instance.answer
+                if student_option == correct_option:
+                    score += 1
+            grade(request.user, code, score)
             info['saved_successfully'] = True
         else:
             info['saved_successfully'] = False
@@ -127,3 +82,12 @@ def get_context_variables(choice, user=None):
 
     else:
         return -1
+
+
+def  grade(user, code, score):
+    try:
+        grade = Grade.objects.get(quiz=Quiz.objects.get(code=code))
+        print(grade)
+        return -1
+    except:
+        pass

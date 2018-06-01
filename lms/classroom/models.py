@@ -37,17 +37,11 @@ class Grade(models.Model):
         ('E', 'E(40-49)'),
         ('F', 'F(30-39)'),
     )
-    grade = models.CharField(max_length=1, choices=GRADE_CHOICES, blank=True, null=True)
+    grade = models.SmallIntegerField(default=0)
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     student =  models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
 
-
-
-class Comment(models.Model):
-    created = models.DateTimeField(auto_now=True)
-    body = models.TextField()
-    author = models.OneToOneField(settings.AUTH_USER_MODEL)
 
 
 #used to handle both quiz and assignments
@@ -55,7 +49,6 @@ class QuizOrAssignment(models.Model):
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     name = models.CharField(max_length=255, unique=True)
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
-    comment = models.ManyToManyField(Comment, blank=True)
     date_of_submission = models.DateTimeField(help_text='Date and time of submission')
     is_assignment = models.BooleanField(default=False)
 
@@ -67,6 +60,8 @@ class QuizOrAssignment(models.Model):
     
     def get_absolute_url_student(self):
         pass
+
+        
 class Question(models.Model):
     quiz = models.ForeignKey(QuizOrAssignment, on_delete=models.CASCADE)
     text = models.TextField('Question')
@@ -81,9 +76,16 @@ class Question(models.Model):
 
 class Discussion(models.Model):
     title = models.CharField(max_length=30)
-    comments = models.OneToOneField(Comment, on_delete=models.CASCADE)
-    created_by = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     course = models.ForeignKey(Course, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
         return self.title
+
+
+class Comment(models.Model):
+    discussion = models.ForeignKey(Discussion, on_delete=models.CASCADE, default=None, null=True)
+    created = models.DateTimeField(auto_now=True)
+    body = models.TextField()
+    author = models.ForeignKey(settings.AUTH_USER_MODEL)
+    

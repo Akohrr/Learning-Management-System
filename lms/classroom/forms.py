@@ -1,6 +1,6 @@
 from django import forms
 from accounts.models import User 
-from .models import Course, QuizOrAssignment, Question
+from .models import Course, QuizOrAssignment, Question, Discussion
 from django.contrib.auth.forms import UserCreationForm
 from django.utils.translation import ugettext_lazy as _
 
@@ -166,21 +166,66 @@ class StudentQuestionForm(forms.ModelForm):
             'third_option'  : forms.Textarea(attrs={'readonly':'readonly'}),
             'fourth_option' : forms.Textarea(attrs={'readonly':'readonly'}),
         }
+    def clean_sanswer(self):
+        if self.cleaned_data['answer'].title() not in ['A', 'B', 'C', 'D']:
+            raise forms.ValidationError(_('Answer does not match any option'), code="no match")
 
 class BaseQuestionFormSet(forms.BaseModelFormSet):
     score = 0
-    def clean(self):
-        super().clean()
+    # def clean(self):
+    #     super().clean()
 
-        for form in self.forms:
-            # if form.cleaned_data['answer']:
-            try: 
-                student_option = form.cleaned_data['answer']
-                correct_answer = form.instance.answer
-                if student_option == correct_answer:
-                    self.score += 1
-            except:
-                raise forms.ValidationError(_('All questions must be answered'))
+    #     for form in self.forms:
+    #         print(form.cleaned_data)
+    #         if True: 
+    #             student_option = form.cleaned_data['sanswer'].title()
+    #             correct_answer = form.instance.answer
+    #             if student_option == correct_answer:
+    #                 self.score += 1
+    #             if form.cleaned_data['sanswer'] not in ['A', 'B', 'C', 'D']:
+    #                 raise forms.ValidationError(_('Answer does not match any option'), code="no match")
+    #         else:
+    #             pass
+    #             raise forms.ValidationError(_('All questions must be answered'))
 
 
-QuestionFormSet = forms.modelformset_factory(Question, form=StudentQuestionForm,extra=0, can_delete=False, formset=BaseQuestionFormSet)
+QuestionFormSet = forms.modelformset_factory(Question, form=StudentQuestionForm,extra=0, can_delete=False)
+
+class DiscussionForm(forms.ModelForm):
+    class Meta:
+        model = Discussion
+        exclude = ('created_by',)
+
+    def __init__(self, user, *args, **kwargs):
+        super(DiscussionForm, self).__init__(*args, **kwargs)
+        self.user = user   #declaring self.user so I can use (user) variable in save method
+        self.fields['course'].queryset = Course.objects.filter(instructors=user)
+
+    def save(self, commit=True):
+        discussion = super().save(commit=False)
+        discussion.created_by = self.user
+        if commit:
+            discussion.save()
+        return discussion
+
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Question
+        exclude = ('author',)
+
+
+    def __init__(self, pk, user, *args, **kwargs):
+        super(CommentForm, self).__init__(*args, **kwargs)
+        #declaring self.user and self.pk so I can use them in save method
+        self.user = user
+        self.pk = pk
+
+
+    def save(self, commit=True):
+        discussion=Discussion.objects.get(pk=self.pk)
+        comment = super().save(commit=False)
+        comment.discussion = discussion
+        if commit:
+            comment.save()
+        return comment

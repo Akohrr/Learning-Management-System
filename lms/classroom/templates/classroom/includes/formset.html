@@ -3,6 +3,7 @@
 {{ formset.management_form }}
 
 {{ formset.non_form_errors.as_ul}}
+
 <table class="w3-table">
     {% for form in formset.forms %}
         {{form.id}}

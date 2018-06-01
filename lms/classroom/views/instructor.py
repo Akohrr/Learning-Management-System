@@ -1,14 +1,10 @@
 from django.shortcuts import render
 from django.views.generic import CreateView, ListView
-from ..models import QuizOrAssignment, Question
+from ..models import QuizOrAssignment, Question, Discussion, Comment
 from .. import forms
 from django.http import JsonResponse
 from django.template.loader import render_to_string
 
-
-
-def home(request):
-    return render(request, r'classroom/instructor/quiz.html')
 
 
 class ChoiceList(ListView):
@@ -26,6 +22,7 @@ class ChoiceList(ListView):
             'quizzes'    : r'classroom/instructor/quizzes.html',
             'assignments': r'classroom/instructor/assignments.html',
             'grades'     : r'classroom/instructor/grades.html',
+            'discussions': r'classroom/instructor/discussions.html',
             }[self.kwargs['choice']]
         return [template]
 
@@ -39,7 +36,8 @@ class Choice(CreateView):
             'assignment': forms.AssignmentForm,
             'quiz'      : forms.QuizForm,
             # 'grade'     : forms.GradeForm,
-            # 'comment'   : forms.CommentForm,
+            'comment'   : forms.CommentForm,
+            'discussion': forms.DiscussionForm,
         }[choice]
         return form(**self.get_form_kwargs())
 
@@ -113,7 +111,11 @@ def get_context_variables(choice, user=None):
             assignments = QuizOrAssignment.objects.filter(is_assignment=True, owner=user).order_by('date_of_submission')[:21]
             questions = Question.objects.filter(quiz__owner=user)
             context = {'assignments': assignments, 'questions':questions}
-
+        elif choice == 'discussions':
+            discussions = Discussion.objects.filter(course__instructors=user)
+            comments = Comment.objects.filter(discussion__created_by=user)
+            context = {'discussions':discussions, 'comments':comments}
+            
 
         return context
     
