@@ -37,7 +37,7 @@
     
                 <tbody>
                 {% for assignment in pending_assignments %}
-                <tr class="w3-hover-teal js-update-soul" data-href="{{user.get_absolute_url}}">
+                <tr class="w3-hover-teal js-answer-assignment" data-href="{% url 'classroom:student_question' pk=assignment.id %}">
                 <td>{{assignment.name}}</td>
                 <td>{{assignment.course.code}}</td>
                 <td>{{assignment.date_of_submission}}</td>
@@ -71,7 +71,7 @@
         
                     <tbody>
                     {% for assignment in submitted_assignments %}
-                    <tr class="w3-hover-teal js-update-soul" data-href="{{user.get_absolute_url}}">
+                    <tr class="w3-hover-teal">
                     <td>{{assignment.name}}</td>
                     <td>{{assignment.course.code}}</td>
                     <td>{{assignment.date_of_submission}}</td>

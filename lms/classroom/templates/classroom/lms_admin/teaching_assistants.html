@@ -1,10 +1,15 @@
-{% extends "classroom/base.html" %}
+{% extends "classroom/lms_admin_base.html" %}
 
 {% load static %}
 
 {% block choice %}
     Teaching Assistants
 {% endblock choice %}
+
+{% block add_button %}
+<button id="js-add-new-choice-btn" class="w3-button w3-black" data-href="{% url 'classroom:lms_admin_add' choice='teaching_assistant' %}">Add new teaching assistant</button>
+
+{% endblock add_button %}
 
 {% block content %}
 
@@ -22,7 +27,7 @@
 
             <tbody>
             {% for teaching_assistant in teaching_assistants %}
-            <tr class="w3-hover-teal js-update-soul" data-href="{{user.get_absolute_url}}">
+            <tr class="w3-hover-teal">
             <td>{{teaching_assistant.first_name}}</td>
             <td>{{teaching_assistant.last_name}}</td>
             <td>{{teaching_assistant.email}}</td>

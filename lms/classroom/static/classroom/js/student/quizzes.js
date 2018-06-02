@@ -26,7 +26,6 @@
 $(document).ready( function () {
 
     $('.js-answer-quiz').click( function () {
-        console.log('akoh');
         row = $(this);
         $.ajax({
           url: row.attr("data-href"),

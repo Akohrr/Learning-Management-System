@@ -42,21 +42,7 @@ $(document).ready(function () {
     });
 
 
-    $("#soulsTable").on("click", "tbody tr ", function () {
-        var row = $(this);
-        rowUrl = row.attr("data-href");
-        $.ajax({
-          type: "get",
-          url: row.attr("data-href"),
-          dataType: 'json',
-          success: function (data){
-            $(".form-data").html(data.html_form);
-            $("#js-update-soul-modal").css('display', 'block');
-    
-          }
-        });
-    
-      });
+
 
 
 });

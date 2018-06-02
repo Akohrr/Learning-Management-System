@@ -1,4 +1,4 @@
-{% extends "classroom/base.html" %}
+{% extends "classroom/lms_admin_base.html" %}
 
 {% load static %}
 
@@ -6,9 +6,12 @@
     Admin
 {% endblock choice %}
 
+{% block add_button %}
+<button id="js-add-new-choice-btn" class="w3-button w3-black" data-href="{% url 'classroom:lms_admin_add' choice='admin' %}">Add new admin staff </button>
+
+{% endblock add_button %}
+
 {% block content %}
-
-
 
     <div class="w3-section">
 

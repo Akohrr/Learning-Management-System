@@ -1,10 +1,12 @@
 {% extends "classroom/student_base.html" %}
 
+{% load student_tags %}
+
 {% load static %}
 
 {% block choice %}
-    Courses
-    <p>List of all the courses you are enrolled in</p>
+    Grades
+    <p>List of all your grades</p>
 {% endblock choice %}
 
 {% block add_button %}
@@ -19,16 +21,18 @@
         <table class="w3-table w3-bordered">
             <thead>
             <tr>
+            <th>Name of assignment</th>
             <th>Course code</th>
-            <th>Course title</th>
+            <th>Grade</th>
             </tr>
             </thead>
 
             <tbody>
-            {% for course in courses %}
+            {% for grade in grades %}
             <tr class="w3-hover-teal">
-            <td>{{course.code}}</td>
-            <td>{{course.title}}</td>
+            <td>{{grade.quiz.name}}</td>
+            <td>{{grade.course.code}}</td>
+            <td>{% get_grade_and_percentage grade.score %}</td>
             </tr>
 
             {% empty %}
@@ -47,8 +51,6 @@
 {% endblock content %}
 
 {% block student_javascript %}
-
-<script src="{% static 'classroom/js/student/courses.js' %}"></script>
 
 
 {% endblock student_javascript %}

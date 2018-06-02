@@ -30,27 +30,35 @@ class ChoiceList(ListView):
         return [template]
 
 
-def take_questions(request, code):
+def take_questions(request, pk):
     """
-    Extracts data of Souls from excel sheet and convert to Json object
+    Returns question as a formset
     """
     info = dict()
-    formset = QuestionFormSet(queryset=Question.objects.filter(quiz__course__code=code))
+    formset = QuestionFormSet(queryset=Question.objects.filter(quiz__id=pk))
     path = request.META.get('PATH_INFO')
     score = 0
     if request.method == 'POST':
         formset = QuestionFormSet(request.POST)
         if formset.is_valid():
             for form in formset:
-                print(form.instance.answer)
-                student_option = form.cleaned_data['answer']
+                # print(len(formset))
+                # import time
+                # time.sleep(6000)
+                student_option = form.cleaned_data['answer'].title()
                 correct_option = form.instance.answer
                 if student_option == correct_option:
                     score += 1
+            score = score/3
+            print(score)
+            import time
+            time.sleep(6000)
             grade(request.user, code, score)
             info['saved_successfully'] = True
+            return JsonResponse(info)
         else:
             info['saved_successfully'] = False
+            
     context = {'formset':formset, 'is_formset':True, 'path':path}
     info['html_form'] = render_to_string('classroom/includes/new_form_modal.html', context)
 
@@ -79,6 +87,9 @@ def get_context_variables(choice, user=None):
             discussions = Discussion.objects.filter(course__students=user)
             comments = Comment.objects.filter(discussion__course__students=user)
             context = {'discussions':discussions, 'comments':comments}
+        elif choice == 'grades':
+            grades = Grade.objects.filter(student=user)
+            context={'grades':grades}
         else:
             return -1
 
@@ -89,12 +100,12 @@ def get_context_variables(choice, user=None):
 
 
 def  grade(user, code, score):
-    # try:
-        #check if a grade exists for a student in that particular course
-    if Grade.objects.get(student=user, course__code=code).exists():
+ 
+    #check if a grade exists for a student in that particular course
+    if Grade.objects.filter(student=user, course__code=code).exists():
         print(grade)
         return -1
     else:
         #if grade does not exist create a new grade for the student in the particular course
         course = Course.objects.get(code=code)
-        Grade.objects.create(sudent=user, course=course, score=score)
+        Grade.objects.create(student=user, course=course, score=score)

@@ -14,6 +14,3 @@ class User(AbstractUser):
     )
 
     user_type = models.CharField(max_length=2, choices=USER_ROLE)
-
-    # def get_absolute_url(self):
-    #     return reverse('classroom:update_user', kwargs={'user_type':self.user_type, 'pk':str(self.pk)})

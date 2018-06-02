@@ -1,6 +1,6 @@
 from django.contrib import admin
 from accounts.models import User
-from .models import Comment, Course, QuizOrAssignment, Question, Discussion
+from .models import Comment, Course, QuizOrAssignment, Question, Discussion, Grade
 from .forms import CourseForm
 
 
@@ -20,3 +20,5 @@ admin.site.register(Question)
 
 
 admin.site.register(Discussion)
+
+admin.site.register(Grade)

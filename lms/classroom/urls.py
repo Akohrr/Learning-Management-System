@@ -20,12 +20,12 @@ urlpatterns = [
 
     # url used to add questions to both quiz and assignment
     url(r'^instructor/add/(?P<choice>[\w\-]+)/(?P<pk>\d+)/$',
-        instructor.QuestionAndCommentHandler.as_view(), name='instructor_add_question'),
+        instructor.QuestionAndCommentHandler.as_view(), name='instructor_add_choice'),
 
     url(r'^student/(?P<choice>[\w\-]+)/$',
         student.ChoiceList.as_view(), name='student_view'),
 
-    url(r'^student/answer-question/(?P<code>[\w\-]+)/$',
+    url(r'^student/answer-question/(?P<pk>[\w\-]+)/$',
         student.take_questions, name='student_question'),
 
 

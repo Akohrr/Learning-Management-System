@@ -35,7 +35,6 @@ class Choice(CreateView):
         form = {
             'assignment': forms.AssignmentForm,
             'quiz'      : forms.QuizForm,
-            # 'grade'     : forms.GradeForm,
             'comment'   : forms.CommentForm,
             'discussion': forms.DiscussionForm,
         }[choice]

@@ -28,10 +28,6 @@ class Course(models.Model):
     def __str__(self):
         return '{0}'.format(self.code)
 
-class Grade(models.Model):
-    score = models.SmallIntegerField(default=0)
-    course = models.ForeignKey(Course, on_delete=models.CASCADE)
-    student =  models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
 
 class Assignment(models.Model):
@@ -64,6 +60,15 @@ class Question(models.Model):
     def __str__(self):
         return self.text
 
+
+class Grade(models.Model):
+    score = models.DecimalField(default=0, decimal_places=2, max_digits=100)
+    quiz = models.ForeignKey(QuizOrAssignment, on_delete=models.CASCADE, null=True, default=None)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    student =  models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.student.username
 
 class Discussion(models.Model):
     title = models.CharField(max_length=30)

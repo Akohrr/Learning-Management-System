@@ -20,25 +20,24 @@ class ChoiceList(ListView):
 
     def get_queryset(self):
         choice = self.kwargs['choice']
-        try:
-            if len(choice) == 2:
-                user_type = {
-                    'lms-admins' : 'LA',
+        user_type = {
+                    'lms_admins' : 'LA',
                     'instructors': 'IN',
                     'students'   : 'ST',
-                    }
-                queryset = User.objects.filter(user_type=user_type[choice])
-            elif choice == 'courses':
-                queryset = Course.objects.all()
-            else:
-                raise Http404 
-        except:
-            raise Http404
+        }
+        if choice in user_type:  
+            queryset = User.objects.filter(user_type=user_type[choice])
+
+        elif choice == 'courses':
+            queryset = Course.objects.all()
+        else:
+            raise Http404 
+
         return queryset
 
     def get_template_names(self):
         template = {
-            'lms-admins' : r'classroom/lms_admin/lms_admins.html',
+            'lms_admins' : r'classroom/lms_admin/lms_admins.html',
             'instructors': r'classroom/lms_admin/instructors.html',
             'students'   : r'classroom/lms_admin/students.html',
             'courses'    : r'classroom/lms_admin/courses.html',
@@ -57,7 +56,7 @@ class SignUpView(CreateView):
     def get_form(self, form_class=None):
         choice = self.kwargs['choice']
         form = {
-            'lms_admin' : forms.LMSAdminSignUpForm,
+            'admin' : forms.LMSAdminSignUpForm,
             'instructor': forms.InstructorSignUpForm,
             'student'   : forms.StudentSignUpForm,
             'course'    : forms.CourseForm,
@@ -68,7 +67,8 @@ class SignUpView(CreateView):
     def get(self, request, *args, **kwargs):
         choice = self.kwargs['choice']
         form = self.get_form()
-        context = {'form': form, 'choice': choice.title()}
+        path = request.META.get('PATH_INFO')
+        context = {'form': form, 'choice': choice.title(), 'path':path}
         self.info['html_form'] = render_to_string(
             'classroom/includes/new_form_modal.html', context)
         return JsonResponse(self.info)
@@ -79,9 +79,10 @@ class SignUpView(CreateView):
         return JsonResponse(self.info)
 
     def form_invalid(self, form):
-        context = {'form': form, 'choice': 'Instructor'}
+        path = self.request.META.get('PATH_INFO')
+        context = {'form': form, 'choice': self.kwargs['choice'].title(), 'path':path}
         self.info['valid'] = False
         self.info['html_form'] = render_to_string(
-            'classroom/includes/modal.html', context)
+            'classroom/includes/new_form_modal.html', context)
         return JsonResponse(self.info)
 

@@ -3,6 +3,7 @@ from accounts.models import User
 from .models import Course, QuizOrAssignment, Question, Discussion, Comment
 from django.contrib.auth.forms import UserCreationForm
 from django.utils.translation import ugettext_lazy as _
+from django.contrib.auth.models import Group
 
 
 # TODO: refactor signupform to add user instance to group after saving 
@@ -40,6 +41,7 @@ class InstructorSignUpForm(UserCreationForm):
         user.user_type = 'IN'
         if commit:
             user.save()
+
         return user
 
 
@@ -166,30 +168,22 @@ class StudentQuestionForm(forms.ModelForm):
             'third_option'  : forms.Textarea(attrs={'readonly':'readonly'}),
             'fourth_option' : forms.Textarea(attrs={'readonly':'readonly'}),
         }
-    def clean_sanswer(self):
-        if self.cleaned_data['answer'].title() not in ['A', 'B', 'C', 'D']:
-            raise forms.ValidationError(_('Answer does not match any option'), code="no match")
+    # def clean_sanswer(self):
+    #     if self.cleaned_data['answer'].title() not in ['A', 'B', 'C', 'D']:
+    #         raise forms.ValidationError(_('Answer does not match any option'), code="no match")
 
 class BaseQuestionFormSet(forms.BaseModelFormSet):
     score = 0
-    # def clean(self):
-    #     super().clean()
+    def clean(self):
+        super().clean()
 
-    #     for form in self.forms:
-    #         print(form.cleaned_data)
-    #         if True: 
-    #             student_option = form.cleaned_data['sanswer'].title()
-    #             correct_answer = form.instance.answer
-    #             if student_option == correct_answer:
-    #                 self.score += 1
-    #             if form.cleaned_data['sanswer'] not in ['A', 'B', 'C', 'D']:
-    #                 raise forms.ValidationError(_('Answer does not match any option'), code="no match")
-    #         else:
-    #             pass
-    #             raise forms.ValidationError(_('All questions must be answered'))
+        for form in self.forms:
+            if form.cleaned_data['answer'].title() not in ['A', 'B', 'C', 'D']:
+                raise forms.ValidationError(_('One or more of your answer(s) does not match any option'), code="no match")
 
 
-QuestionFormSet = forms.modelformset_factory(Question, form=StudentQuestionForm,extra=0, can_delete=False)
+
+QuestionFormSet = forms.modelformset_factory(Question, form=StudentQuestionForm,extra=0, formset=BaseQuestionFormSet, can_delete=False)
 
 class DiscussionForm(forms.ModelForm):
     class Meta:
