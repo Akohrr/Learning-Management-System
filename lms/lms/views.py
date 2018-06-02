@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.url.resolvers import reverse
+from django.core.urlresolvers import reverse
 from django.http import Http404
 
 
