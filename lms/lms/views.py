@@ -4,7 +4,7 @@ from django.http import Http404
 
 
 def landing_page(request):
-    return redirect('account:login')
+    return redirect('accountss:login')
 
 
 def home_page(request):
