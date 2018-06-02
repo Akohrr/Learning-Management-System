@@ -4,6 +4,10 @@ from django.http import Http404
 
 
 def landing_page(request):
+    return redirect('account:login')
+
+
+def home_page(request):
     if request.user.user_type == 'LA':
         return redirect(r"classroom:lms_admin_view choice='lms_admins'")
 
