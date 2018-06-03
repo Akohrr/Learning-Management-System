@@ -1,2 +1,2 @@
 
-web: gunicorn lms.wsgi
+web: python manage.py runserver
