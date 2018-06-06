@@ -46,7 +46,7 @@ class QuizOrAssignment(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return reverse('classroom:instructor_add_question', kwargs={'choice':'quiz', 'pk': self.pk })
+        return reverse('classroom:instructor_add_choice', kwargs={'choice':'quiz', 'pk': self.pk })
 
         
 class Question(models.Model):
