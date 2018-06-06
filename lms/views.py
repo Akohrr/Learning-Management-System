@@ -7,6 +7,10 @@ def landing_page(request):
     return redirect('accounts:login')
 
 
+def forbidden_response_page(request):
+    return render(request, '403.html')
+
+
 def home_page(request):
     if request.user.user_type == 'LA':
         return redirect("classroom:lms_admin_view", choice='lms_admins')

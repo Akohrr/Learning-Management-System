@@ -1,11 +1,12 @@
 from django.conf.urls import url, include
 from django.contrib import admin
-from .views import landing_page, home_page
+from .views import landing_page, home_page, forbidden_response_page
 from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
     url(r'^$', landing_page, name='landing_page'),
+    url(r'^forbidden/$', forbidden_response_page, name='403_page'),
     url(r'^home/$', home_page, name='home'),
     url(r'^accounts/', include(('accounts.urls'), namespace='accounts')),
     url(r'^classroom/', include(('classroom.urls'), namespace='classroom')),

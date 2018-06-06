@@ -1,13 +1,28 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views.generic import CreateView, ListView
 from ..models import QuizOrAssignment, Question, Discussion, Comment
 from .. import forms
 from django.http import JsonResponse
+# from django.contrib.auth.decorators import user_passes_test
 from django.template.loader import render_to_string
+from django.contrib.auth.mixins import UserPassesTestMixin
 
 
 
-class ChoiceList(ListView):
+class TestInstructor(UserPassesTestMixin):
+    
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            # This will redirect to the login view
+            return self.handle_no_permission()
+        if not self.request.user.groups.filter(name='Instructor Role').exists():
+            # Redirect the user to 403 page
+            return redirect('403_page')
+
+        # Checks pass, let http method handlers process the request
+        return super().dispatch(request, *args, **kwargs)
+
+class ChoiceList(TestInstructor, ListView):
 
     def get_context_object_name(self, object_list):
         object_name = self.kwargs['choice']
@@ -27,7 +42,7 @@ class ChoiceList(ListView):
         return [template]
 
 
-class Choice(CreateView):
+class Choice(TestInstructor, CreateView):
     info = dict()
 
     def get_form(self, form_class=None):
@@ -67,7 +82,7 @@ class Choice(CreateView):
         return JsonResponse(self.info)
 
 
-class QuestionAndCommentHandler(CreateView):
+class QuestionAndCommentHandler(TestInstructor, CreateView):
     info = dict()
 
     def get_form(self, form_class=None):
@@ -129,4 +144,4 @@ def get_context_variables(choice, user=None):
         return context
     
     else:
-        return -1
+        return redirect('403_page')

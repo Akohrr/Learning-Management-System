@@ -45,8 +45,7 @@ INSTALLED_APPS = [
     'classroom',
 
     #3rd party apps
-    'widget_tweaks',
-    'guardian',
+    'widget_tweaks', #widget_tweaks: use of third party app to render forms manually
 
     #admin app
     'django.contrib.admin',
@@ -149,24 +148,4 @@ AUTH_USER_MODEL = 'accounts.User'
 
 LOGIN_REDIRECT_URL = reverse_lazy('home')
 
-AUTHENTICATION_BACKENDS = (
-    'django.contrib.auth.backends.ModelBackend',
-    'guardian.backends.ObjectPermissionBackend',
-)
 
-# in_heroku = False
-
-# if 'DATABASE_URL' in os.environ:
-#     in_heroku = True
-
-
-# if in_heroku:
-#     DATABASES = {'default': dj_database_url.config()}
-
-# else:
-#     DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-#     }
-# }

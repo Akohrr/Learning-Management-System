@@ -10,7 +10,7 @@ class Module(models.Model):
     class_file = models.FileField()
 
     def __str__(self):
-        return self.name
+        return self.name         
 
 
 
@@ -30,9 +30,6 @@ class Course(models.Model):
 
 
 
-class Assignment(models.Model):
-    pass
-
 
 #used to handle both quiz and assignments
 class QuizOrAssignment(models.Model):
@@ -47,6 +44,11 @@ class QuizOrAssignment(models.Model):
 
     def get_absolute_url(self):
         return reverse('classroom:instructor_add_choice', kwargs={'choice':'quiz', 'pk': self.pk })
+
+    class Meta:
+        permissions = (
+            ('modify_quiz_or_assignment', 'Modify quiz or assignment'),
+        )
 
         
 class Question(models.Model):

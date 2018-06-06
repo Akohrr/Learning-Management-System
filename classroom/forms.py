@@ -39,8 +39,11 @@ class InstructorSignUpForm(UserCreationForm):
     def save(self, commit=True):
         user = super().save(commit=False)
         user.user_type = 'IN'
+        instructors = Group.objects.get(name='Instructor Role')
         if commit:
             user.save()
+            user.groups.add(instructors)
+
 
         return user
 
