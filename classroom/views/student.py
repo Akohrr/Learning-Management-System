@@ -7,6 +7,7 @@ from ..forms import QuestionFormSet
 from django.http import JsonResponse
 from django.template.loader import render_to_string
 from classroom.models import Question, Grade, QuizOrAssignment, Discussion, Comment
+from django.core.exceptions import PermissionDenied
 
 
 class ChoiceList(ListView):
@@ -91,20 +92,19 @@ def get_context_variables(choice, user=None):
             grades = Grade.objects.filter(student=user)
             context={'grades':grades}
         else:
-            return -1
+            raise PermissionDenied
 
         return context
 
     else:
-        return -1
+        raise PermissionDenied
 
 
 def  grade(user, code, score):
  
     #check if a grade exists for a student in that particular course
     if Grade.objects.filter(student=user, course__code=code).exists():
-        print(grade)
-        return -1
+        raise PermissionDenied
     else:
         #if grade does not exist create a new grade for the student in the particular course
         course = Course.objects.get(code=code)

@@ -6,6 +6,7 @@ from django.http import JsonResponse
 # from django.contrib.auth.decorators import user_passes_test
 from django.template.loader import render_to_string
 from django.contrib.auth.mixins import UserPassesTestMixin
+from django.core.exceptions import PermissionDenied
 
 
 
@@ -17,7 +18,7 @@ class TestInstructor(UserPassesTestMixin):
             return self.handle_no_permission()
         if not self.request.user.groups.filter(name='Instructor Role').exists():
             # Redirect the user to 403 page
-            return redirect('403_page')
+            raise PermissionDenied
 
         # Checks pass, let http method handlers process the request
         return super().dispatch(request, *args, **kwargs)
@@ -144,4 +145,4 @@ def get_context_variables(choice, user=None):
         return context
     
     else:
-        return redirect('403_page')
+        raise PermissionDenied

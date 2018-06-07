@@ -23,9 +23,13 @@ class LMSAdminSignUpForm(UserCreationForm):
     def save(self, commit=True):
         user = super().save(commit=False)
         user.user_type = 'LA'
+        lms_admins = Group.objects.get(name='Admin Role')
         if commit:
             user.save()
+            user.groups.add(lms_admins)
         return user
+
+
 
 
 class InstructorSignUpForm(UserCreationForm):

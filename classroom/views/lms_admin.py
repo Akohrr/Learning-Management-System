@@ -10,6 +10,7 @@ from django.contrib.auth.models import Group
 from django.views.generic.edit import FormMixin
 from django.contrib.auth.mixins import UserPassesTestMixin
 from .. models import Course
+from django.core.exceptions import PermissionDenied
 
 
 class TestLMSAdmin(UserPassesTestMixin):
@@ -20,7 +21,7 @@ class TestLMSAdmin(UserPassesTestMixin):
             return self.handle_no_permission()
         if not self.request.user.groups.filter(name='Admin Role').exists():
             # Redirect the user to 403 page
-            return redirect('403_page')
+            raise PermissionDenied
 
         # Checks pass, let http method handlers process the request
         return super().dispatch(request, *args, **kwargs)
