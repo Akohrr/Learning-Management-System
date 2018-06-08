@@ -6,12 +6,15 @@ from .forms import CourseForm
 
 admin.site.register(Comment)
 
-admin.site.register(QuizOrAssignment)
-
 class CourseAdmin(admin.ModelAdmin):
 
     form = CourseForm
     list_display = ('code', 'title',)
+
+class QuizOrAssignmentAdmin(admin.ModelAdmin):
+    raw_id_fields = ('owner',)
+
+admin.site.register(QuizOrAssignment, QuizOrAssignmentAdmin)
 
 
 admin.site.register(Course, CourseAdmin)

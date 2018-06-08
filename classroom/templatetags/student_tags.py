@@ -4,9 +4,9 @@ register = template.Library()
 
 @register.simple_tag
 def get_grade_and_percentage(score):
-    score = score * 100
+    # score = score * 100
     grade = ''
-    if score > 80 and score < 100:
+    if score > 80 and score <= 100:
         grade = 'A'
     elif score > 70 and score < 80:
         grade = 'B'

@@ -21,7 +21,7 @@
         <table class="w3-table w3-bordered">
             <thead>
             <tr>
-            <th>Name of assignment</th>
+            <th>Name of assignment/quiz</th>
             <th>Course code</th>
             <th>Grade</th>
             </tr>
@@ -30,7 +30,7 @@
             <tbody>
             {% for grade in grades %}
             <tr class="w3-hover-teal">
-            <td>{{grade.quiz.name}}</td>
+            <td>{{grade.quiz_or_assignment.name}}</td>
             <td>{{grade.course.code}}</td>
             <td>{% get_grade_and_percentage grade.score %}</td>
             </tr>
@@ -38,7 +38,7 @@
             {% empty %}
             <tbody>
                 <tr>
-                    <td colspan="2" class="w3-grey w3-center">No data to display</td>
+                    <td colspan="3" class="w3-grey w3-center">No data to display</td>
                 </tr>
             </tbody>
             {% endfor %}

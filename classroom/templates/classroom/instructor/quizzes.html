@@ -18,7 +18,7 @@
       <div id="quiz-accordion-{{ forloop.counter }}" class="w3-hide w3-animate-zoom">
       {% for question in questions %}
 
-        {% if quiz.name == question.quiz.name %}
+        {% if quiz.name == question.quiz_or_assignment.name %}
         <p><a href="#" class="w3-button w3-block w3-left-align">{{ question |truncatechars:30 }}</a></p>
         {% endif %}
         

@@ -15,16 +15,15 @@ from django.core.exceptions import PermissionDenied
 
 class TestLMSAdmin(UserPassesTestMixin):
     
-    def dispatch(self, request, *args, **kwargs):
-        if not request.user.is_authenticated:
-            # This will redirect to the login view
-            return self.handle_no_permission()
+    def test_func(self):
+        if not self.request.user.is_authenticated:
+            # This will redirect to the 403 page
+            raise PermissionDenied
         if not self.request.user.groups.filter(name='Admin Role').exists():
             # Redirect the user to 403 page
             raise PermissionDenied
+        return self.dispatch
 
-        # Checks pass, let http method handlers process the request
-        return super().dispatch(request, *args, **kwargs)
 
 class ChoiceList(TestLMSAdmin, ListView):
 

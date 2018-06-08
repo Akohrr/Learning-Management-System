@@ -44,9 +44,9 @@
           <div id="token">
             {% csrf_token %}
           </div>
-        <div id="js-add-new-choice-modal" class="w3-modal">
-            <div id="js-add-new-choice-modal-content" class="w3-modal-content w3-card-4 w3-animate-zoom">
-              <span id="js-close-new-choice-modal"
+        <div id="js-question-modal" class="w3-modal">
+            <div id="js-question-modal-content" class="w3-modal-content w3-card-4 w3-animate-zoom">
+              <span id="js-close-question-modal"
               class="w3-button w3-teal w3-large w3-display-topright">&times;</span>
               <div id="display-form-content">
 
@@ -69,7 +69,7 @@
   {% block javascript %}
   <!-- javascript file used by all classroom sub pages -->
   <script src="{% static 'classroom/js/main.js' %}"></script>
-
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
   <!-- block to include javascript files of student sub pages particular to one page -->
   {% block student_javascript %}
   

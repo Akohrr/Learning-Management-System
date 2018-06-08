@@ -56,20 +56,18 @@ The project would be available at 127.0.0.1:8000
 
 ## Running the tests
 
-Explain how to run the automated tests for this system
+Use the details below to login and access the different features and roles of the system
 
-### Break down into end to end tests
+|   username   |  password   |       Role |
+|:------------:|:-----------:|-----------:|
+|  kdutchburn2 | randompass  |    Admin   |
+|  bosheilds1u | randompass  |    Admin   |
+| cschachter98 | randompass  |    Admin   |
+| aashurst48   | randompass  | Instructor |
+|   acolbyea   | randompass  | Instructor |
+|   aedger6j   | randompass  | Instructor |
+|   abasond5   | randompass  |   Student  |
+|    aberny    | randompass  |   Student  |
+|  adeverale8y | randompass  |   Student  |
 
-Explain what these tests test and why
-
-```
-Give an example
-```
-
-### And coding style tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
+login to the system using one of the login credentials in the table above

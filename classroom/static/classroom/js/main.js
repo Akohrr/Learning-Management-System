@@ -45,6 +45,9 @@
         $("#js-add-new-choice-modal").hide();
     });
 
+    $("#js-close-question-modal").click( function () {
+        $("#js-question-modal").hide();
+    });
 
     $("#js-add-new-choice-btn").click( function () {
         button = $(this);
@@ -76,8 +79,7 @@
           if (info.valid) {
             $("#js-add-new-choice-modal").hide();
             location.reload();
-          }
-          else {
+          } else {
             input = jQuery(" <input type='hidden' name=csrfmiddlewaretoken value="+''+getCookie('csrftoken')+">");
             $("#token").append(input);
             $("#display-form-content").html(info.html_form);

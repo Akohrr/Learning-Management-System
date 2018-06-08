@@ -12,16 +12,16 @@ from django.core.exceptions import PermissionDenied
 
 class TestInstructor(UserPassesTestMixin):
     
-    def dispatch(self, request, *args, **kwargs):
-        if not request.user.is_authenticated:
-            # This will redirect to the login view
-            return self.handle_no_permission()
+    def test_func(self):
+        if not self.request.user.is_authenticated:
+            # Redirect the user to 403 page
+            raise PermissionDenied
         if not self.request.user.groups.filter(name='Instructor Role').exists():
             # Redirect the user to 403 page
             raise PermissionDenied
 
         # Checks pass, let http method handlers process the request
-        return super().dispatch(request, *args, **kwargs)
+        return self.dispatch
 
 class ChoiceList(TestInstructor, ListView):
 

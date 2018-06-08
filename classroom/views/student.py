@@ -36,32 +36,39 @@ def take_questions(request, pk):
     Returns question as a formset
     """
     info = dict()
-    formset = QuestionFormSet(queryset=Question.objects.filter(quiz__id=pk))
+    questions = Question.objects.filter(quiz_or_assignment__id=pk)
+    formset = QuestionFormSet(queryset=questions)
+    time_left_till_submission = timezone.now() - questions[0].quiz_or_assignment.date_of_submission
+    print(time_left_till_submission.seconds)
+    import time
+    time.sleep(6000)
     path = request.META.get('PATH_INFO')
     score = 0
+
     if request.method == 'POST':
         formset = QuestionFormSet(request.POST)
         if formset.is_valid():
             for form in formset:
-                # print(len(formset))
-                # import time
-                # time.sleep(6000)
                 student_option = form.cleaned_data['answer'].title()
                 correct_option = form.instance.answer
                 if student_option == correct_option:
                     score += 1
-            score = score/3
+            score = (score/len(formset)) * 100
             print(score)
-            import time
-            time.sleep(6000)
-            grade(request.user, code, score)
-            info['saved_successfully'] = True
+            status = grade(request.user, score, pk)
+            print(status)
+            if status:
+                info['submitted_successfully'] = True
+                
+            else:
+                info['already_submitted'] = True
+            
             return JsonResponse(info)
         else:
-            info['saved_successfully'] = False
+            info['submitted_successfully'] = False
             
     context = {'formset':formset, 'is_formset':True, 'path':path}
-    info['html_form'] = render_to_string('classroom/includes/new_form_modal.html', context)
+    info['html_form'] = render_to_string('classroom/includes/answer_question_modal.html', context)
 
     return JsonResponse(info)
 
@@ -100,12 +107,14 @@ def get_context_variables(choice, user=None):
         raise PermissionDenied
 
 
-def  grade(user, code, score):
- 
+def  grade(user, score, pk):
+    quiz_or_assignment = QuizOrAssignment.objects.get(pk=pk)
+    code = quiz_or_assignment.course.code
     #check if a grade exists for a student in that particular course
     if Grade.objects.filter(student=user, course__code=code).exists():
-        raise PermissionDenied
+        return False
     else:
         #if grade does not exist create a new grade for the student in the particular course
         course = Course.objects.get(code=code)
-        Grade.objects.create(student=user, course=course, score=score)
+        Grade.objects.create(quiz_or_assignment=quiz_or_assignment, student=user, course=course, score=score)
+        return True

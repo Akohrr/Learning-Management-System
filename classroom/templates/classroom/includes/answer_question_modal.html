@@ -1,0 +1,24 @@
+<header class="w3-container w3-teal">
+
+    <h2>Please, answer the following questions</h2>
+   </header>
+
+<div class="scrollmenu">
+    <p>Time left: <span id="answer-countdown">woo</span> </p>
+  <form method="post" id="js-question-form" action="{{ path }}" novalidate>  
+      <div class="w3-section form-data w3-container">
+
+        {% if is_formset %}
+        {% include "classroom/includes/formset.html" with formset=formset %}
+        {% else %}
+        {% include "classroom/includes/form.html" with form=form %}
+        {% endif %}
+
+        <button class="w3-button w3-round-large w3-teal">Submit</button>
+
+      </div>
+  </form> 
+</div>
+  <footer class="w3-container w3-teal">
+    <p>Modal Footer</p>
+</footer>

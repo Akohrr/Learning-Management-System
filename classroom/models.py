@@ -52,7 +52,7 @@ class QuizOrAssignment(models.Model):
 
         
 class Question(models.Model):
-    quiz = models.ForeignKey(QuizOrAssignment, on_delete=models.CASCADE)
+    quiz_or_assignment = models.ForeignKey(QuizOrAssignment, on_delete=models.CASCADE)
     text = models.TextField('Question')
     first_option = models.TextField('A')
     second_option = models.TextField('B')
@@ -64,8 +64,8 @@ class Question(models.Model):
 
 
 class Grade(models.Model):
-    score = models.DecimalField(default=0, decimal_places=2, max_digits=100)
-    quiz = models.ForeignKey(QuizOrAssignment, on_delete=models.CASCADE, null=True, default=None)
+    score = models.DecimalField(default=0, decimal_places=2, max_digits=100, help_text='Score is expressed in percentage')
+    quiz_or_assignment = models.ForeignKey(QuizOrAssignment, on_delete=models.CASCADE, null=True, default=None)
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     student =  models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
