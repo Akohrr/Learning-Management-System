@@ -6,8 +6,6 @@ from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import Group
 
 
-# TODO: refactor signupform to add user instance to group after saving
-
 class LMSAdminSignUpForm(UserCreationForm):
     first_name = forms.CharField(max_length=30)
     last_name = forms.CharField(max_length=30)
@@ -172,7 +170,7 @@ class StudentQuestionForm(forms.ModelForm):
 
     class Meta:
         model = Question
-        exclude = ('quiz', 'answer',)
+        exclude = ('quiz_or_assignment', 'answer',)
 
         widgets = {
             'text': forms.Textarea(attrs={'readonly': 'readonly'}),

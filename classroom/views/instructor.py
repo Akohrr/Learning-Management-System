@@ -130,11 +130,11 @@ def get_context_variables(choice, user=None):
     if user.user_type == 'IN':
         if choice == 'quizzes':
             quiz = QuizOrAssignment.objects.filter(is_assignment=False, owner=user).order_by('date_of_submission')[:21]
-            questions = Question.objects.filter(quiz__owner=user)
+            questions = Question.objects.filter(quiz_or_assignment__owner=user)
             context = {'quizzes': quiz, 'questions':questions}
         elif choice == 'assignments':
             assignments = QuizOrAssignment.objects.filter(is_assignment=True, owner=user).order_by('date_of_submission')[:21]
-            questions = Question.objects.filter(quiz__owner=user)
+            questions = Question.objects.filter(quiz_or_assignment__owner=user)
             context = {'assignments': assignments, 'questions':questions}
         elif choice == 'discussions':
             discussions = Discussion.objects.filter(course__instructors=user)

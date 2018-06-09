@@ -38,10 +38,8 @@ def take_questions(request, pk):
     info = dict()
     questions = Question.objects.filter(quiz_or_assignment__id=pk)
     formset = QuestionFormSet(queryset=questions)
-    time_left_till_submission = timezone.now() - questions[0].quiz_or_assignment.date_of_submission
-    print(time_left_till_submission.seconds)
-    import time
-    time.sleep(6000)
+    date_of_submission = str(questions[0].quiz_or_assignment.date_of_submission)
+    print(date_of_submission)
     path = request.META.get('PATH_INFO')
     score = 0
 
@@ -67,7 +65,7 @@ def take_questions(request, pk):
         else:
             info['submitted_successfully'] = False
             
-    context = {'formset':formset, 'is_formset':True, 'path':path}
+    context = {'formset':formset, 'is_formset':True, 'path':path, 'date_of_submission':date_of_submission}
     info['html_form'] = render_to_string('classroom/includes/answer_question_modal.html', context)
 
     return JsonResponse(info)

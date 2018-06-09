@@ -1,3 +1,36 @@
+function countDown (time_of_submission) {
+  // Set the date we're counting down to
+var countDownDate = new Date(String(time_of_submission)).getTime();
+
+// Update the count down every 1 second
+var x = setInterval(function() {
+
+    // Get todays date and time
+    var now = new Date().getTime();
+    
+    // Find the distance between now an the count down date
+    var distance = countDownDate - now;
+    
+    // Time calculations for days, hours, minutes and seconds
+    var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+    
+    // Output the result in an element with id="demo"
+    document.getElementById("answer-countdown").innerHTML = days + "d " + hours + "h "
+    + minutes + "m " + seconds + "s ";
+    
+    // If the count down is over, write some text 
+    if (distance < 0) {
+        clearInterval(x);
+        document.getElementById("answer-countdown").innerHTML = "EXPIRED";
+        $("#js-question-modal").hide();
+        location.reload();
+    }
+}, 1000);
+}
+
 $('.js-answer-assignment').click( function () {
     row = $(this);
     $.ajax({
@@ -9,18 +42,14 @@ $('.js-answer-assignment').click( function () {
         $("#js-question-modal").show();
         console.log('akoh');
         $("#display-form-content").html(data.html_form);
-        $("#answer-countdown").html("tesing");
-        var count = 5;
-        setInterval(function(){
-            count--;
-            // document.getElementById('countDown').innerHTML = count;
-            $("#answer-countdown").html("tesing");
-            if (count == 0) {
-                window.location = '/'; 
-            }
-        },1000);('Redirect()', 5000);
+         time_of_submission = $("#answer-countdown").html();
+        countDown(time_of_submission);
 
-      }
+      },  
+      error: function(xhr) { // if error occured
+        swal("Please wait", "No questions have been added to the assignment. Please check back later", "info");
+
+      },
 
     });
 });
