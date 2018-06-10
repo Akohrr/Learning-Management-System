@@ -1,16 +1,13 @@
 from django.shortcuts import render, redirect
 from django.core.urlresolvers import reverse
 from django.core.exceptions import PermissionDenied
-
+from django.contrib.auth.decorators import login_required
 
 def landing_page(request):
     return redirect('accounts:login')
 
 
-def forbidden_response_page(request):
-    return render(request, '403.html')
-
-
+@login_required
 def home_page(request):
     try:
         if request.user.user_type == 'LA':
@@ -26,4 +23,5 @@ def home_page(request):
             raise PermissionDenied
     
     except AttributeError:
+  
         return redirect('accounts:login')
