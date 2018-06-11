@@ -116,7 +116,7 @@ class QuizForm(forms.ModelForm):
         # declaring self.user so I can use (user) variable in save method
         self.user = user
         self.fields['course'].queryset = Course.objects.filter(
-            instructors=user).order_by('username')
+            instructors=user).order_by('instructors')
 
     def save(self, commit=True):
         quiz = super().save(commit=False)

@@ -15,7 +15,7 @@
 
     <a href="{% url 'classroom:instructor_view' choice='assignments' %}" class="w3-bar-item w3-button">Assignment</a>
     <a href="{% url 'classroom:instructor_view' choice='quizzes' %}" class="w3-bar-item w3-button">Quiz</a>
-    <a href="{% url 'classroom:instructor_view' choice='grades' %}" class="w3-bar-item w3-button">Grades</a>
+    {% comment %} <a href="{% url 'classroom:instructor_view' choice='grades' %}" class="w3-bar-item w3-button">Grades</a> {% endcomment %}
     <a href="{% url 'classroom:instructor_view' choice='discussions' %}" class="w3-bar-item w3-button">Discussion</a>
 
 
