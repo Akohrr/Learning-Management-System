@@ -1,0 +1,22 @@
+{
+  "summary": {
+    "title": "threat",
+    "owner": "Akoh",
+    "description": "A high level"
+  },
+  "detail": {
+    "contributors": [
+      {
+        "name": "akohrr"
+      }
+    ],
+    "diagrams": [
+      {
+        "title": "dia",
+        "thumbnail": "./public/content/images/thumbnail.jpg",
+        "id": 0
+      }
+    ],
+    "reviewer": "Akoh"
+  }
+}
